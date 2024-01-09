@@ -30,6 +30,11 @@ const engineListStore = useEngineListStore();
                  :style="{backgroundImage: `url(${engine.icon})`}"></div>
             <div class="setting-item-content-item-name">{{engine.name}}</div>
           </div>
+          <div class="setting-item-content-item">
+            <div>
+
+            </div>
+          </div>
         </div>
         <tip msg="若图标无法正常显示，则表明你所在区域无法使用该搜索引擎！" type="warning"/>
       </div>

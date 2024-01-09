@@ -66,6 +66,8 @@
   --el-text-color-primary: #303133;
   --el-text-color-regular: #606266;
 
+  --el-overlay-color-lighter: rgba(0, 0, 0, .5);
+
   .dark {
     --el-color-primary: #409eff;
     --el-color-primary-light-3: #3375b9;
@@ -116,6 +118,7 @@
     --el-bg-color-page: #0a0a0a;
     --el-bg-color: #141414;
     --el-bg-color-overlay: #1d1e1f;
+
   }
 }
 
