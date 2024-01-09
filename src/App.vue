@@ -10,19 +10,19 @@ const isChina = location.hostname === 'search.sugarscat.cn'
   <main>
     <HomeView/>
   </main>
-  <footer>
-    <p>
-      ©  2024-2099 Sugarscat
-      <span v-if="isChina">
-        &nbsp|
-        <a target="_blank"
-           href="https://beian.miit.gov.cn/"
-           title="本网站(.cn)已备案，皖ICP备2023005836号-1">
-          &nbsp皖ICP备2023005836号-1
-        </a>
-      </span>
-    </p>
-  </footer>
+<!--  <footer>-->
+<!--    <p>-->
+<!--      ©  2024-2099 Sugarscat-->
+<!--      <span v-if="isChina">-->
+<!--        &nbsp|-->
+<!--        <a target="_blank"-->
+<!--           href="https://beian.miit.gov.cn/"-->
+<!--           title="本网站(.cn)已备案，皖ICP备2023005836号-1">-->
+<!--          &nbsp皖ICP备2023005836号-1-->
+<!--        </a>-->
+<!--      </span>-->
+<!--    </p>-->
+<!--  </footer>-->
 </template>
 
 <style scoped lang="scss">

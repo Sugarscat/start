@@ -1,18 +1,28 @@
-<script lang="ts">
-import {defineComponent} from 'vue'
+<script setup lang="ts">
+import {defineComponent, ref} from 'vue'
+import {useEngineStore} from "@/stores/engine";
 
-export default defineComponent({
-  name: "SearchInput"
+defineComponent({
+  name: "SearchInput",
 })
 
+const engineStore = useEngineStore();
+const inputValue = ref('');
+const doSearch = () => {
+  location.href = engineStore.engine + inputValue.value;
+};
 
 </script>
 
 <template>
   <div class="search-input-area">
     <div id="icon"></div>
-    <input class="search-input">
-    <button></button>
+    <input class="search-input"
+           v-model="inputValue"
+           placeholder="搜索，或输入网址"
+           @keyup.enter="doSearch"
+    >
+    <button class="search-image"></button>
   </div>
 </template>
 
@@ -25,6 +35,8 @@ export default defineComponent({
     border-radius: 1.45rem;
     box-shadow: var(--shadow);
     padding: 0 20px;
+
+    min-width: 560px;
 
     #icon {
       background-color: var(--color-realbox-search-icon-background);
@@ -73,6 +85,13 @@ export default defineComponent({
       padding: 0;
       pointer-events: auto;
 
+    }
+  }
+
+  @media (max-width: 600px) {
+    .search-input-area {
+      min-width: 340px;
+      width: 100%;
     }
   }
 </style>
