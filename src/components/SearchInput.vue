@@ -1,14 +1,18 @@
 <script setup lang="ts">
 import {defineComponent, ref} from 'vue'
 import {useEngineStore} from "@/stores/engine";
+import {useEngineListStore} from "@/stores/engineList";
 
 defineComponent({
   name: "SearchInput",
 })
 
 const engineStore = useEngineStore();
+const engineListStore = useEngineListStore();
 const inputValue = ref('');
 const doSearch = () => {
+  if (!engineStore.engine)
+    engineStore.setEngine(engineListStore.engines[0].url);
   location.href = engineStore.engine + inputValue.value;
 };
 
@@ -35,8 +39,12 @@ const doSearch = () => {
     border-radius: 1.45rem;
     box-shadow: var(--shadow);
     padding: 0 20px;
-
+    background-color: var(--vt-c-white);
     min-width: 560px;
+
+    @media (max-width: 600px) {
+      padding: 0 10px;
+    }
 
     #icon {
       background-color: var(--color-realbox-search-icon-background);

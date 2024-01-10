@@ -3,21 +3,46 @@
 #app {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
 }
 
-@media (min-width: 800px) {
+@media (min-width: 600px) {
   body {
     display: flex;
     place-items: center;
   }
 
-  #app {
+}
 
+@media (max-width: 600px) {
+  #app {
+    padding: .5rem;
   }
 }
 
 span {
   color: var(--color-text);
+}
+
+.icon {
+  fill: var(--el-color-info);
+
+  width: 25px;
+  height: 25px;
+
+  &:hover {
+    fill: var(--el-text-color-regular);
+  }
+
+  &.icon--small {
+    width: 20px;
+    height: 20px;
+  }
+
+  &.delete {
+    fill: var(--el-color-danger);
+  }
+}
+
+input {
+  background: transparent;
 }

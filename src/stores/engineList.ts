@@ -1,4 +1,4 @@
-import { ref } from 'vue'
+import {ref} from 'vue'
 import { defineStore } from 'pinia'
 
 export const useEngineListStore =
@@ -9,47 +9,47 @@ export const useEngineListStore =
                 name: 'Google',
                 icon: 'https://www.google.com/favicon.ico',
                 url: 'https://www.google.com/search?q=',
-                canDelete: false
+                revise: false
             },
             {
                 name: 'Bing',
                 icon: 'https://www.bing.com/favicon.ico',
                 url: 'https://www.bing.com/search?q=',
-                canDelete: false
+                revise: false
             },
             {
                 name: 'DuckDuckGo',
                 icon: 'https://duckduckgo.com/favicon.ico',
                 url: 'https://duckduckgo.com/?q=',
-                canDelete: false
+                revise: false
             },
             {
                 name: 'Yahoo',
                 icon: 'https://search.yahoo.com/favicon.ico',
                 url: 'https://search.yahoo.com/search?p=',
-                canDelete: false
+                revise: false
             },
             {
                 name: 'Yandex',
                 icon: 'https://yandex.com/favicon.ico',
                 url: 'https://yandex.com/search/?text=',
-                canDelete: false
+                revise: false
             },
             {
                 name: '百度',
                 icon: 'https://www.baidu.com/favicon.ico',
                 url: 'https://www.baidu.com/s?wd=',
-                canDelete: false
+                revise: false
             },
             {
                 name: '搜狗',
                 icon: 'https://www.sogou.com/favicon.ico',
                 url: 'https://www.sogou.com/web?query=',
-                canDelete: false
+                revise: false
             }
         ])
 
-        const addEngines = (item: never) => {
+        const addEngines = (item: any) => {
             engines.value.push(item)
         }
 
