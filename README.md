@@ -6,6 +6,10 @@
 
 在线地址：[搜索](https://search.sugarscat.com)
 
+## Notice
+
+颜色主题来自 [Element Plus](https://element-plus.org)
+
 ## Project Setup
 
 ```sh
