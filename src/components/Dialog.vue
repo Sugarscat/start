@@ -1,64 +1,29 @@
 <script setup lang="ts">
-import {ref} from "vue";
-import {useEngineListStore} from "@/stores/engineList";
 import CloseIcon from "@/components/icons/CloseIcon.vue";
 
 const props = defineProps<{
   visible: boolean,
   onClose: () => void,
+  onSure: () => void,
 }>()
-
-const engineListStore = useEngineListStore();
-const data = ref({
-  name: '',
-  icon: '',
-  url: '',
-  revise: true,
-})
-
-const addEngine = () => {
-  if (!data.value.name || !data.value.icon || !data.value.url) {
-    return;
-  }
-  engineListStore.addEngines(data.value);
-  // 重置表单数据
-  data.value = {
-    name: '',
-    icon: '',
-    url: '',
-    revise: true,
-  }
-  props.onClose();
-}
 </script>
 
 <template>
   <div class="dialog" :class="{close: !props.visible}">
-    <div class="dialog-content" :class="{open: props.visible}">
+    <div class="dialog-body" :class="{open: props.visible}">
       <div class="title">
         <span>
-          添加搜索引擎
+          <slot name="title"></slot>
         </span>
         <div class="close-operation" @click="props.onClose()">
           <close-icon/>
         </div>
       </div>
       <div class="content">
-        <label>
-          <span>名称</span>
-          <input type="text" placeholder="请输入搜索引擎名称" v-model="data.name"/>
-        </label>
-        <label>
-          <span>图标</span>
-          <input type="text" placeholder="请输入搜索引擎图标地址" v-model="data.icon"/>
-        </label>
-        <label>
-          <span>地址</span>
-          <input type="text" placeholder="请输入搜索引擎地址" v-model="data.url"/>
-        </label>
+        <slot name="content"></slot>
       </div>
       <div class="operation">
-        <button @click="addEngine">添加</button>
+        <button @click="props.onSure()">确认</button>
       </div>
     </div>
     <div class="dialog-backdrop" @click="props.onClose()"></div>
@@ -84,7 +49,7 @@ const addEngine = () => {
     }
   }
 
-  .dialog-content {
+  .dialog-body {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -98,6 +63,10 @@ const addEngine = () => {
     z-index: 99;
 
     animation: dialog-content-close 0.3s ease-in-out;
+
+    @media (max-width: 410px) {
+      width: 360px;
+    }
 
     &.open {
       animation: dialog-open 0.3s ease-in-out;
@@ -130,32 +99,7 @@ const addEngine = () => {
     }
 
     .content {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
 
-      label {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-
-        span {
-          font-size: 14px;
-          color: #666;
-        }
-
-        input {
-          flex: 1;
-          height: 45px;
-          line-height: 45px;
-          padding: 0 10px;
-          border: 1px solid #eee;
-          border-radius: 4px;
-          outline: none;
-          font-size: 14px;
-          color: #333;
-        }
-      }
     }
 
     .operation {
@@ -164,10 +108,10 @@ const addEngine = () => {
       margin-top: 20px;
 
       button {
-        height: 40px;
+        height: 35px;
         width: 90px;
 
-        border: 1px solid var(--el-color-primary-light-3);
+        border: 2px solid var(--el-color-primary-light-3);
         background-color: var(--el-color-primary-light-8);
         border-radius: 5px;
 
@@ -175,8 +119,13 @@ const addEngine = () => {
 
         transition: all 0.1s ease-in-out;
 
+        font-size: .8rem;
+        font-weight: bold;
+        color: var(--color-text);
+
         &:hover {
           background-color: var(--el-color-primary-light-3);
+          color: var(--color-background);
         }
       }
     }

@@ -3,12 +3,12 @@ import {defineComponent, ref} from 'vue'
 import {useEngineStore} from "@/stores/engine";
 import {useEngineListStore} from "@/stores/engineList";
 import Tip from "@/components/Tip.vue";
-import EngineDialog from "@/components/EngineDialog.vue";
+import Dialog from "@/components/Dialog.vue";
 import ReviseIcon from "@/components/icons/ReviseIcon.vue";
 import AddIcon from "@/components/icons/AddIcon.vue";
-import {useDark, useToggle} from "@vueuse/core";
+import {useDark} from "@vueuse/core";
 import DeleteIcon from "@/components/icons/DeleteIcon.vue";
-import CloseIcon from "@/components/icons/CloseIcon.vue";
+import EditIcon from "@/components/icons/EditIcon.vue";
 
 defineComponent({
   name: "Setting",
@@ -16,23 +16,111 @@ defineComponent({
 
 const engineStore = useEngineStore();
 const engineListStore = useEngineListStore();
-const engineDialogVisible = ref(false);
+const dialogVisible = ref(false);
 const isOperation = ref(false);
 const isDark = useDark()
+const engine = ref({
+  name: '',
+  url: '',
+  icon: '',
+  revise: true,
+})
+const index = ref(0)
+const title = ref('')
+const nameInput = ref()
+const iconInput = ref()
+const urlInput = ref()
 
-const deleteEngines = (number: number) => {
+const deleteEngine = (number: number) => {
   if (engineStore.engine === engineListStore.engines[number].url) {
-    engineStore.setEngine(engineListStore.engines(0).url)
+    engineStore.setEngine(engineListStore.engines[0].url)
   }
   engineListStore.deleteEngine(number)
 }
 
-const addEngine = () => {
-  engineDialogVisible.value = true;
+const openDialog = () => {
+  dialogVisible.value = true;
 }
 
-const closeAddEngineDialog = () => {
-  engineDialogVisible.value = false;
+const closeDialog = () => {
+  dialogVisible.value = false;
+  reset()
+}
+
+const reset = () => {
+  index.value = 0
+  engine.value = {
+    name: '',
+    url: '',
+    icon: '',
+    revise: true,
+  }
+  nameInput.value.classList.remove('error')
+  iconInput.value.classList.remove('error')
+  urlInput.value.classList.remove('error')
+}
+
+const add = () => {
+  title.value = '添加搜索引擎'
+  openDialog()
+}
+
+const addEngine = () => {
+  engineListStore.addEngine(engine.value)
+  closeDialog()
+}
+
+const update = (i: number, value: any) => {
+  value = {
+    name: value.name,
+    url: value.url,
+    icon: value.icon,
+    revise: value.revise,
+  } // 解绑 ref
+  title.value = '修改搜索引擎'
+  index.value = i
+  engine.value = value
+  openDialog()
+}
+
+const updateEngine = () => {
+  engineListStore.engines[index.value] = engine.value
+  closeDialog()
+}
+
+const onSure = () => {
+
+  if (!verify()) return
+
+  if (index.value === 0) {
+    addEngine()
+  } else {
+    updateEngine()
+  }
+}
+
+// 验证
+const verify = () => {
+  let pass = true
+  if (!engine.value.name) {
+    nameInput.value.classList.add('error')
+    pass = false
+  } else {
+    nameInput.value.classList.remove('error')
+  }
+  if (!engine.value.icon) {
+    iconInput.value.classList.add('error')
+    pass = false
+  } else {
+    iconInput.value.classList.remove('error')
+  }
+  if (!engine.value.url) {
+    urlInput.value.classList.add('error')
+    pass = false
+  }  else {
+    urlInput.value.classList.remove('error')
+  }
+  return pass
 }
 </script>
 
@@ -62,11 +150,11 @@ const closeAddEngineDialog = () => {
                  :style="{backgroundImage: `url(${engine.icon})`}"></div>
             <div class="text">{{engine.name}}</div>
             <div class="operation" v-if="isOperation&&engine.revise" @click.stop>
-              <revise-icon/>
-              <delete-icon @click="deleteEngines(number)"/>
+              <edit-icon @click="update(number, engine)"/>
+              <delete-icon @click="deleteEngine(number)"/>
             </div>
           </div>
-          <div class="content-item" title="添加" @click="addEngine">
+          <div class="content-item" title="添加" @click="add()">
             <add-icon/>
           </div>
         </div>
@@ -107,7 +195,56 @@ const closeAddEngineDialog = () => {
     </div>
   </div>
 
-  <EngineDialog :on-close="closeAddEngineDialog" :visible="engineDialogVisible"/>
+  <Dialog :on-close="closeDialog"
+          :visible="dialogVisible"
+          :on-sure="onSure">
+    <template #title>
+      {{title}}
+    </template>
+    <template #content>
+      <div class="engine-form">
+        <div class="form-item">
+          <label for="name">名称:</label>
+          <div>
+            <input type="text"
+                   id="name"
+                   v-model="engine.name"
+                   ref="nameInput"
+                   @change="verify"
+                   placeholder="请输入搜索引擎名称"
+            >
+            <p>名称不能为空</p>
+          </div>
+        </div>
+        <div class="form-item">
+          <label for="icon">图标:</label>
+          <div>
+            <input type="text"
+                   id="icon"
+                   v-model="engine.icon"
+                   ref="iconInput"
+                   @change="verify"
+                   placeholder="请输入搜索引擎图标地址"
+            >
+            <p>图标不能为空</p>
+          </div>
+        </div>
+        <div class="form-item">
+          <label for="url">网址:</label>
+          <div>
+            <input type="text"
+                   id="url"
+                   v-model="engine.url"
+                   ref="urlInput"
+                   @change="verify"
+                   placeholder="请输入搜索引擎网址"
+            >
+            <p>网址不能为空</p>
+          </div>
+        </div>
+      </div>
+    </template>
+  </Dialog>
 </template>
 
 <style scoped lang="scss">
@@ -173,7 +310,7 @@ const closeAddEngineDialog = () => {
           .operation {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 5px;
             margin-left: 10px;
             flex-direction: row;
 
@@ -185,10 +322,10 @@ const closeAddEngineDialog = () => {
             //background-color: var(--el-color-primary-light-7);
 
             svg {
-              height: 15px;
-              width: 15px;
+              width: 18px;
+              height: 18px;
 
-              &.revise {
+              &.edit {
                 fill: var(--el-color-primary-light-3);
 
                 &:hover {
@@ -230,6 +367,58 @@ const closeAddEngineDialog = () => {
           }
         }
       }
+    }
+  }
+}
+
+.engine-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  .form-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    label {
+      text-align: right;
+    }
+
+    input {
+      flex: 1;
+      height: 45px;
+      width: 325px;
+      line-height: 45px;
+      padding: 0 10px;
+      border: 1.5px solid var(--el-color-info-light-3);
+      border-radius: 4px;
+      outline: none;
+
+      @media (max-width: 410px) {
+        width: 285px;
+      }
+
+      &.error {
+        border-color: var(--el-color-danger-light-3);
+        color: var(--el-color-danger-light-3);
+      }
+
+      &:focus {
+        border-color: var(--el-color-primary-light-3);
+        color: var(--color-text);
+      }
+    }
+
+    input + p {
+      display: none;
+      color: var(--el-color-danger-light-3);
+      font-size: .75rem;
+      font-weight: bold;
+    }
+
+    input.error + p {
+      display: block;
     }
   }
 }

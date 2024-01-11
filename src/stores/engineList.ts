@@ -43,15 +43,24 @@ export const useEngineListStore =
             }
         ])
 
-        const addEngines = (item: any) => {
+        const addEngine = (item: any) => {
             engines.value.push(item)
         }
 
-        const deleteEngines = (item: number) => {
+        const deleteEngine = (item: number) => {
             engines.value.splice(item, 1)
         }
 
-        return { engines, addEngines, deleteEngines }
+        const getEngine = (i: number) => {
+          return engines.value[i]
+        }
+
+        return {
+            engines,
+            addEngine,
+            deleteEngine,
+            getEngine
+        }
 
     }, {
         persist: true
