@@ -46,3 +46,17 @@ span {
 input {
   background: transparent;
 }
+
+.button {
+  cursor: pointer;
+}
+
+.active {
+  color: var(--el-color-primary);
+  fill: var(--el-color-primary);
+
+  &:hover {
+    color: var(--el-color-primary-light-3);
+    fill: var(--el-color-primary-light-3);
+  }
+}

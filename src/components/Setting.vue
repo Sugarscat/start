@@ -22,9 +22,9 @@ const isDark = useDark()
 
 const deleteEngines = (number: number) => {
   if (engineStore.engine === engineListStore.engines[number].url) {
-    engineStore.setEngine(engineListStore.engines[0].url)
+    engineStore.setEngine(engineListStore.engines(0).url)
   }
-  engineListStore.deleteEngines(number)
+  engineListStore.deleteEngine(number)
 }
 
 const addEngine = () => {
@@ -38,13 +38,17 @@ const closeAddEngineDialog = () => {
 
 <template>
   <div class="setting-area">
-    <div class="setting-content">
+    <div class="setting-body">
       <div class="setting-item">
         <div class="setting-item-title">
           <span>搜索引擎</span>
           <div class="revise-operation operation">
-            <revise-icon @click="isOperation=true" title="编辑"/>
-            <close-icon @click="isOperation=false" v-show="isOperation" title="关闭编辑"/>
+            <revise-icon @click="isOperation=!isOperation"
+                         title="编辑"
+                         class="button"
+                         :class="{active: isOperation}"
+            />
+            <tip msg="再次点击，关闭编辑" type="warning" v-if="isOperation"/>
           </div>
         </div>
         <div class="setting-item-content">
@@ -57,7 +61,7 @@ const closeAddEngineDialog = () => {
             <div class="engine-icon"
                  :style="{backgroundImage: `url(${engine.icon})`}"></div>
             <div class="text">{{engine.name}}</div>
-            <div class="operation" v-show="isOperation&&engine.revise" @click.stop>
+            <div class="operation" v-if="isOperation&&engine.revise" @click.stop>
               <revise-icon/>
               <delete-icon @click="deleteEngines(number)"/>
             </div>
@@ -109,10 +113,14 @@ const closeAddEngineDialog = () => {
 <style scoped lang="scss">
 .setting-area {
 
-  .setting-content {
+  .setting-body {
 
     .setting-item {
       margin-bottom: 10px;
+
+      background-color: var(--color-background);
+      padding: 10px;
+      border-radius: 10px;
 
       .setting-item-title {
         display: flex;
@@ -128,7 +136,6 @@ const closeAddEngineDialog = () => {
         .operation {
           display: flex;
           align-items: center;
-          cursor: pointer;
 
           gap: 10px;
 
@@ -140,6 +147,10 @@ const closeAddEngineDialog = () => {
               height: 1.25rem;
               width: 1.25rem;
             }
+          }
+
+          .tip {
+            font-size: 14px;
           }
         }
       }
@@ -166,8 +177,10 @@ const closeAddEngineDialog = () => {
             margin-left: 10px;
             flex-direction: row;
 
-            padding: 2px 8px;
             border-radius: 12px;
+
+            position: relative;
+            right: -5px;
 
             //background-color: var(--el-color-primary-light-7);
 
@@ -177,11 +190,19 @@ const closeAddEngineDialog = () => {
 
               &.revise {
                 fill: var(--el-color-primary-light-3);
+
+                &:hover {
+                  fill: var(--el-color-primary-light-5);
+                }
               }
 
               &.delete {
                 width: 20px;
                 height: 20px;
+
+                &:hover {
+                  fill: var(--el-color-danger-light-3);
+                }
               }
             }
           }
