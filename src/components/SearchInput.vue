@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {defineComponent, ref} from 'vue'
+import {defineComponent, onMounted, ref} from 'vue'
 import {useEngineStore} from "@/stores/engine";
 import {useEngineListStore} from "@/stores/engineList";
 
@@ -16,6 +16,10 @@ const doSearch = () => {
   location.href = engineStore.engine + inputValue.value;
 };
 
+onMounted(() => {
+  if (!engineStore.engine)
+    engineStore.setEngine(engineListStore.engines[0].url);
+});
 </script>
 
 <template>

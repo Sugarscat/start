@@ -12,40 +12,34 @@ export const useEngineListStore =
                 revise: false
             },
             {
+                name: '百度',
+                icon: 'https://www.baidu.com/favicon.ico',
+                url: 'https://www.baidu.com/s?wd=',
+                revise: true
+            },
+            {
                 name: 'Bing',
                 icon: 'https://www.bing.com/favicon.ico',
                 url: 'https://www.bing.com/search?q=',
-                revise: false
+                revise: true
             },
             {
                 name: 'DuckDuckGo',
                 icon: 'https://duckduckgo.com/favicon.ico',
                 url: 'https://duckduckgo.com/?q=',
-                revise: false
-            },
-            {
-                name: 'Yahoo',
-                icon: 'https://search.yahoo.com/favicon.ico',
-                url: 'https://search.yahoo.com/search?p=',
-                revise: false
+                revise: true
             },
             {
                 name: 'Yandex',
                 icon: 'https://yandex.com/favicon.ico',
                 url: 'https://yandex.com/search/?text=',
-                revise: false
-            },
-            {
-                name: '百度',
-                icon: 'https://www.baidu.com/favicon.ico',
-                url: 'https://www.baidu.com/s?wd=',
-                revise: false
+                revise: true
             },
             {
                 name: '搜狗',
                 icon: 'https://www.sogou.com/favicon.ico',
                 url: 'https://www.sogou.com/web?query=',
-                revise: false
+                revise: true
             }
         ])
 
