@@ -571,7 +571,7 @@ const deleteBackground = (i: number) => {
 
       &.error {
         border-color: var(--el-color-danger-light-3);
-        color: var(--el-color-danger-light-3);
+        color: var(--el-color-danger);
       }
 
       &:focus {
@@ -582,7 +582,7 @@ const deleteBackground = (i: number) => {
 
     input + p {
       display: none;
-      color: var(--el-color-danger-light-3);
+      color: var(--el-color-danger);
       font-size: .75rem;
       font-weight: bold;
     }
