@@ -4,17 +4,13 @@ import { defineStore } from 'pinia'
 export const useBackgroundListStore =
     defineStore('backgroundList', () => {
 
-        const backgrounds = ref(
-            [
-                {
-                    solid: false,
-                    revise: true,
-                    value: 'https://source.unsplash.com/random/1920x1080'
-                }
-            ]
-        )
+        const backgrounds = ref<{
+            solid: boolean;
+            revise: boolean;
+            value: string
+        }[]>([])
 
-        const addBackgrounds = (item: never) => {
+        const addBackground = (item: any) => {
             backgrounds.value.push(item)
         }
 
@@ -28,7 +24,7 @@ export const useBackgroundListStore =
 
         return {
             backgrounds,
-            addBackgrounds,
+            addBackground,
             deleteBackground,
             gerBackground
         }

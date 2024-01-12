@@ -147,7 +147,7 @@ const props = defineProps<{
 
 @keyframes dialog-open {
   0% {
-    transform: translate(-50%, 150%);
+    transform: translate(-50%, 200%);
   }
 
   100% {
@@ -171,7 +171,7 @@ const props = defineProps<{
   }
 
   100% {
-    transform: translate(-50%, 150%);
+    transform: translate(-50%, 200%);
   }
 }
 </style>

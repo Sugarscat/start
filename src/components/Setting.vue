@@ -37,6 +37,14 @@ const nameInput = ref()
 const iconInput = ref()
 const urlInput = ref()
 
+const backgroundDialogVisible = ref(false);
+const background = ref({
+  value: '',
+  revise: true,
+  solid: false,
+})
+const backgroundUrlInput = ref()
+
 const deleteEngine = (number: number) => {
   if (engineStore.engine === engineListStore.engines[number].url) {
     engineStore.setEngine(engineListStore.engines[0].url)
@@ -61,9 +69,15 @@ const reset = () => {
     icon: '',
     revise: true,
   }
+  background.value = {
+    value: '',
+    revise: true,
+    solid: false,
+  }
   nameInput.value.classList.remove('error')
   iconInput.value.classList.remove('error')
   urlInput.value.classList.remove('error')
+  backgroundUrlInput.value.classList.remove('error')
 }
 
 const addEngine = () => {
@@ -94,9 +108,9 @@ const doUpdateEngine = () => {
   closeEngineDialog()
 }
 
-const onSure = () => {
+const engineOnSure = () => {
 
-  if (!verify()) return
+  if (!verifyEngine()) return
 
   if (index.value === 0) {
     doAddEngine()
@@ -106,7 +120,7 @@ const onSure = () => {
 }
 
 // 验证
-const verify = () => {
+const verifyEngine = () => {
   let pass = true
   if (!engine.value.name) {
     nameInput.value.classList.add('error')
@@ -127,6 +141,32 @@ const verify = () => {
     urlInput.value.classList.remove('error')
   }
   return pass
+}
+
+const openBackgroundDialog = ()=> {
+  backgroundDialogVisible.value = true
+}
+
+const closeBackgroundDialog = ()=> {
+  backgroundDialogVisible.value = false
+  reset()
+}
+
+const addBackground = () => {
+  if (!background.value.value) {
+    backgroundUrlInput.value.classList.add('error')
+    return
+  }
+  backgroundListStore.addBackground(background.value)
+  backgroundStore.background = background.value
+  closeBackgroundDialog()
+}
+
+const deleteBackground = (i: number) => {
+  if (backgroundStore.background?.value === backgroundListStore.backgrounds[i].value) {
+    backgroundStore.setBackground(null)
+  }
+  backgroundListStore.deleteBackground(i)
 }
 </script>
 
@@ -218,7 +258,7 @@ const verify = () => {
           <div class="content-item-bg"
                v-for="(background, number) in backgroundListStore.backgrounds"
                 :class="{active: backgroundStore.background?.value === background.value}"
-                @click="backgroundStore.setBackground(backgroundListStore.backgrounds[0])"
+                @click="backgroundStore.setBackground(backgroundListStore.backgrounds[number])"
           >
             <div class="selected">
               <select-icon/>
@@ -226,7 +266,7 @@ const verify = () => {
             <img :src="background.value" class="image" alt="bg"/>
             <div class="background-operation"
                  v-if="isBgOperation"
-                 @click="backgroundListStore.deleteBackground(number)"
+                 @click="deleteBackground(number)"
             >
               <delete-icon/>
             </div>
@@ -234,6 +274,7 @@ const verify = () => {
           <div class="setting-item-content">
             <div class="content-item-bg"
                  style=""
+                 @click="openBackgroundDialog()"
             >
               <add-icon/>
             </div>
@@ -245,7 +286,7 @@ const verify = () => {
 
   <Dialog :on-close="closeEngineDialog"
           :visible="engineDialogVisible"
-          :on-sure="onSure">
+          :on-sure="engineOnSure">
     <template #title>
       {{title}}
     </template>
@@ -258,7 +299,7 @@ const verify = () => {
                    id="name"
                    v-model="engine.name"
                    ref="nameInput"
-                   @change="verify"
+                   @change="verifyEngine"
                    placeholder="请输入搜索引擎名称"
             >
             <p>名称不能为空</p>
@@ -271,7 +312,7 @@ const verify = () => {
                    id="icon"
                    v-model="engine.icon"
                    ref="iconInput"
-                   @change="verify"
+                   @change="verifyEngine"
                    placeholder="请输入搜索引擎图标地址"
             >
             <p>图标不能为空</p>
@@ -284,10 +325,34 @@ const verify = () => {
                    id="url"
                    v-model="engine.url"
                    ref="urlInput"
-                   @change="verify"
+                   @change="verifyEngine"
                    placeholder="请输入搜索引擎网址"
             >
             <p>网址不能为空</p>
+          </div>
+        </div>
+      </div>
+    </template>
+  </Dialog>
+
+  <Dialog :on-close="closeBackgroundDialog"
+          :visible="backgroundDialogVisible"
+          :on-sure="addBackground">
+    <template #title>
+      添加背景
+    </template>
+    <template #content>
+      <div class="background-form">
+        <div class="form-item">
+          <label for="value">地址:</label>
+          <div>
+            <input type="text"
+                   id="value"
+                   v-model="background.value"
+                   placeholder="请输入图片地址"
+                   ref="backgroundUrlInput"
+            >
+            <p>图片地址不能为空</p>
           </div>
         </div>
       </div>
@@ -419,8 +484,8 @@ const verify = () => {
         }
 
         .content-item-bg {
-          width: 100px;
-          height: 100px;
+          width: 103px;
+          height: 103px;
           padding: 0;
           position: relative;
           justify-content: center;
@@ -473,6 +538,7 @@ const verify = () => {
   }
 }
 
+.background-form,
 .engine-form {
   display: flex;
   flex-direction: column;
