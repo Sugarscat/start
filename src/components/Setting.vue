@@ -9,6 +9,9 @@ import AddIcon from "@/components/icons/AddIcon.vue";
 import {useDark} from "@vueuse/core";
 import DeleteIcon from "@/components/icons/DeleteIcon.vue";
 import EditIcon from "@/components/icons/EditIcon.vue";
+import {useBackgroundStore} from "@/stores/background";
+import {useBackgroundListStore} from "@/stores/backgroundList";
+import SelectIcon from "@/components/icons/SelectIcon.vue";
 
 defineComponent({
   name: "Setting",
@@ -16,8 +19,11 @@ defineComponent({
 
 const engineStore = useEngineStore();
 const engineListStore = useEngineListStore();
-const dialogVisible = ref(false);
-const isOperation = ref(false);
+const backgroundStore = useBackgroundStore();
+const backgroundListStore = useBackgroundListStore();
+const engineDialogVisible = ref(false);
+const isEngineOperation = ref(false);
+const isBgOperation = ref(false);
 const isDark = useDark()
 const engine = ref({
   name: '',
@@ -38,12 +44,12 @@ const deleteEngine = (number: number) => {
   engineListStore.deleteEngine(number)
 }
 
-const openDialog = () => {
-  dialogVisible.value = true;
+const openEngineDialog = () => {
+  engineDialogVisible.value = true;
 }
 
-const closeDialog = () => {
-  dialogVisible.value = false;
+const closeEngineDialog = () => {
+  engineDialogVisible.value = false;
   reset()
 }
 
@@ -60,17 +66,17 @@ const reset = () => {
   urlInput.value.classList.remove('error')
 }
 
-const add = () => {
-  title.value = '添加搜索引擎'
-  openDialog()
-}
-
 const addEngine = () => {
-  engineListStore.addEngine(engine.value)
-  closeDialog()
+  title.value = '添加搜索引擎'
+  openEngineDialog()
 }
 
-const update = (i: number, value: any) => {
+const doAddEngine = () => {
+  engineListStore.addEngine(engine.value)
+  closeEngineDialog()
+}
+
+const updateEngine = (i: number, value: any) => {
   value = {
     name: value.name,
     url: value.url,
@@ -80,12 +86,12 @@ const update = (i: number, value: any) => {
   title.value = '修改搜索引擎'
   index.value = i
   engine.value = value
-  openDialog()
+  openEngineDialog()
 }
 
-const updateEngine = () => {
+const doUpdateEngine = () => {
   engineListStore.engines[index.value] = engine.value
-  closeDialog()
+  closeEngineDialog()
 }
 
 const onSure = () => {
@@ -93,9 +99,9 @@ const onSure = () => {
   if (!verify()) return
 
   if (index.value === 0) {
-    addEngine()
+    doAddEngine()
   } else {
-    updateEngine()
+    doUpdateEngine()
   }
 }
 
@@ -130,17 +136,17 @@ const verify = () => {
       <div class="setting-item">
         <div class="setting-item-title">
           <span>搜索引擎</span>
-          <div class="revise-operation operation">
-            <revise-icon @click="isOperation=!isOperation"
+          <div class="setting-item-operation">
+            <revise-icon @click="isEngineOperation=!isEngineOperation"
                          title="编辑"
                          class="button"
-                         :class="{active: isOperation}"
+                         :class="{active: isEngineOperation}"
             />
-            <tip msg="再次点击，关闭编辑" type="warning" v-if="isOperation"/>
+            <tip msg="再次点击，关闭编辑" type="warning" v-if="isEngineOperation"/>
           </div>
         </div>
         <div class="setting-item-content">
-          <div class="content-item"
+          <div class="content-item-engine"
                v-for="(engine, number) in engineListStore.engines"
                :key="engine.name"
                :class="{active: engineStore.engine === engine.url}"
@@ -149,12 +155,12 @@ const verify = () => {
             <div class="engine-icon"
                  :style="{backgroundImage: `url(${engine.icon})`}"></div>
             <div class="text">{{engine.name}}</div>
-            <div class="operation" v-if="isOperation&&engine.revise" @click.stop>
-              <edit-icon @click="update(number, engine)"/>
+            <div class="engine-operation" v-if="isEngineOperation&&engine.revise" @click.stop>
+              <edit-icon @click="updateEngine(number, engine)"/>
               <delete-icon @click="deleteEngine(number)"/>
             </div>
           </div>
-          <div class="content-item" title="添加" @click="add()">
+          <div class="content-item-engine" title="添加" @click="addEngine()">
             <add-icon/>
           </div>
         </div>
@@ -166,7 +172,7 @@ const verify = () => {
           <span>主题</span>
         </div>
         <div class="setting-item-content">
-          <div class="content-item"
+          <div class="content-item-theme"
                 :class="{active: !isDark}"
                 @click="isDark = false"
           >
@@ -174,7 +180,7 @@ const verify = () => {
               浅色
             </div>
           </div>
-          <div class="content-item"
+          <div class="content-item-theme"
                :class="{active: isDark}"
                @click="isDark = true"
           >
@@ -187,16 +193,58 @@ const verify = () => {
       <div class="setting-item">
         <div class="setting-item-title">
           <span>背景</span>
+          <div class="setting-item-operation">
+            <revise-icon @click="isBgOperation=!isBgOperation"
+                         title="编辑"
+                         class="button"
+                         :class="{active: isBgOperation}"
+            />
+            <tip msg="再次点击，关闭编辑" type="warning" v-if="isBgOperation"/>
+          </div>
         </div>
         <div class="setting-item-content">
-
+          <div class="setting-item-content">
+            <div class="content-item-bg"
+                 style="width: 100px"
+                 :class="{active: !backgroundStore.background}"
+                  @click="backgroundStore.setBackground(null)"
+            >
+              <div class="selected">
+                <select-icon/>
+              </div>
+              默认
+            </div>
+          </div>
+          <div class="content-item-bg"
+               v-for="(background, number) in backgroundListStore.backgrounds"
+                :class="{active: backgroundStore.background?.value === background.value}"
+                @click="backgroundStore.setBackground(backgroundListStore.backgrounds[0])"
+          >
+            <div class="selected">
+              <select-icon/>
+            </div>
+            <img :src="background.value" class="image" alt="bg"/>
+            <div class="background-operation"
+                 v-if="isBgOperation"
+                 @click="backgroundListStore.deleteBackground(number)"
+            >
+              <delete-icon/>
+            </div>
+          </div>
+          <div class="setting-item-content">
+            <div class="content-item-bg"
+                 style=""
+            >
+              <add-icon/>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <Dialog :on-close="closeDialog"
-          :visible="dialogVisible"
+  <Dialog :on-close="closeEngineDialog"
+          :visible="engineDialogVisible"
           :on-sure="onSure">
     <template #title>
       {{title}}
@@ -270,7 +318,7 @@ const verify = () => {
           font-weight: bold;
         }
 
-        .operation {
+        .setting-item-operation {
           display: flex;
           align-items: center;
 
@@ -295,19 +343,21 @@ const verify = () => {
       .setting-item-content {
         display: flex;
         flex-wrap: wrap;
-        gap: 5px;
+        gap: 10px;
 
-        .content-item {
+        .content-item-bg,
+        .content-item-theme,
+        .content-item-engine {
           display: flex;
           align-items: center;
           padding: 10px;
           cursor: pointer;
-          border: 2px solid var(--el-color-primary-light-3);
+          border: 2px solid var(--el-color-info-light-7);
           border-radius: 10px;
 
           transition: all 0.25s ease-in-out;
 
-          .operation {
+          .engine-operation {
             display: flex;
             align-items: center;
             gap: 5px;
@@ -363,7 +413,59 @@ const verify = () => {
           }
 
           &.active {
+            border-color: var(--el-color-primary-light-3);
             background-color: var(--el-color-primary-light-8);
+          }
+        }
+
+        .content-item-bg {
+          width: 100px;
+          height: 100px;
+          padding: 0;
+          position: relative;
+          justify-content: center;
+
+          .selected {
+            display: none;
+          }
+
+          &.active {
+            .selected {
+              display: block;
+              position: absolute;
+              top: -8px;
+              right: -8px;
+
+              svg {
+                width: 25px;
+                height: 25px;
+                background-color: var(--color-background);
+                fill: var(--el-color-primary);
+                border-radius: 50%;
+              }
+            }
+          }
+
+          img {
+            width: 100px;
+            height: 100px;
+
+            border-radius: 10px;
+
+            object-fit: cover;
+          }
+
+          .background-operation {
+            display: flex;
+            padding: 5px;
+            border-radius: 50%;
+            background-color: var(--el-overlay-color);
+            backdrop-filter: blur(5px);
+            position: absolute;
+            //居中
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
           }
         }
       }
@@ -394,6 +496,8 @@ const verify = () => {
       border: 1.5px solid var(--el-color-info-light-3);
       border-radius: 4px;
       outline: none;
+
+      color: var(--color-text);
 
       @media (max-width: 410px) {
         width: 285px;

@@ -1,10 +1,18 @@
 import {ref} from 'vue'
 import { defineStore } from 'pinia'
 
-export const useBackgroundsListStore =
-    defineStore('engineList', () => {
+export const useBackgroundListStore =
+    defineStore('backgroundList', () => {
 
-        const backgrounds = ref([])
+        const backgrounds = ref(
+            [
+                {
+                    solid: false,
+                    revise: true,
+                    value: 'https://source.unsplash.com/random/1920x1080'
+                }
+            ]
+        )
 
         const addBackgrounds = (item: never) => {
             backgrounds.value.push(item)

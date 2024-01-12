@@ -5,6 +5,7 @@ import Setting from "@/components/Setting.vue";
 import Drawer from "@/components/Drawer.vue";
 import {ref} from "vue";
 import SettingIcon from "@/components/icons/SettingIcon.vue";
+import Background from "@/components/Background.vue";
 
 const isOpen = ref(false);
 
@@ -18,6 +19,7 @@ const closeDrawer = () => {
 </script>
 
 <template>
+  <Background/>
   <div @click="openDrawer" class="setting-btn">
     <setting-icon/>
   </div>

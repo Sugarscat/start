@@ -70,6 +70,7 @@
   --el-text-color-regular: #606266;
 
   --el-overlay-color-lighter: rgba(0, 0, 0, .5);
+  --el-overlay-color: rgba(255, 255, 255, .5);
 
 }
 
@@ -148,6 +149,8 @@ html.dark {
   --color-background-mute: var(--vt-c-black-mute);
 
   --color-text: var(--vt-c-text-dark-1);
+
+  --el-overlay-color: var(--el-overlay-color-lighter);
 }
 
 *,

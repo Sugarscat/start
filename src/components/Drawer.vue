@@ -117,6 +117,12 @@ const props = defineProps<{
     background-color: var(--el-color-info-light-8);
     padding: 10px;
     border-radius: 20px;
+
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 }
 

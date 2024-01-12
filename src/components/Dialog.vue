@@ -22,7 +22,7 @@ const props = defineProps<{
       <div class="content">
         <slot name="content"></slot>
       </div>
-      <div class="operation">
+      <div class="dialog-operation">
         <button @click="props.onSure()">确认</button>
       </div>
     </div>
@@ -102,7 +102,7 @@ const props = defineProps<{
 
     }
 
-    .operation {
+    .dialog-operation {
       display: flex;
       justify-content: flex-end;
       margin-top: 20px;
