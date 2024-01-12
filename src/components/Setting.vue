@@ -306,10 +306,10 @@ const deleteBackground = (i: number) => {
           </div>
         </div>
         <div class="form-item">
-          <label for="icon">图标:</label>
+          <label for="engine-icon">图标:</label>
           <div>
             <input type="text"
-                   id="icon"
+                   id="engine-icon"
                    v-model="engine.icon"
                    ref="iconInput"
                    @change="verifyEngine"

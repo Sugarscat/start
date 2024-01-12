@@ -31,8 +31,10 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="mask-layer" v-if="hasBg"></div>
-  <div class="background" ref="backgroundHtml"></div>
+  <div class="main-bg">
+    <div class="mask-layer" v-if="hasBg"></div>
+    <div class="background" ref="backgroundHtml"></div>
+  </div>
 </template>
 
 <style scoped lang="scss">

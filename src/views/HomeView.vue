@@ -23,6 +23,11 @@ const closeDrawer = () => {
   <div @click="openDrawer" class="setting-btn">
     <setting-icon/>
   </div>
+
+  <div class="occupancy top"></div>
+  <search-input/>
+  <div class="occupancy bottom"></div>
+
   <drawer :on-close="closeDrawer" :visible="isOpen">
     <template #title>
       设置
@@ -31,7 +36,6 @@ const closeDrawer = () => {
       <setting/>
     </template>
   </drawer>
-  <search-input/>
 </template>
 
 <style scoped lang="scss">
@@ -45,6 +49,25 @@ const closeDrawer = () => {
   svg {
     width: 28px;
     height: 28px;
+  }
+}
+
+.occupancy {
+  height: 10vh;
+
+  &.top {
+    @media (min-width: 600px) {
+      display: none;
+    }
+    //background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.5) 100%);
+  }
+
+  &.bottom {
+    height: 20vh;
+    @media (max-width: 600px) {
+      display: none;
+    }
+    //background: linear-gradient(0deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.5) 100%);
   }
 }
 </style>
