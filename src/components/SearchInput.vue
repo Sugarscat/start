@@ -119,10 +119,13 @@ onMounted(() => {
     }
 
     input.search-input {
+      flex: 1;
       border: none;
       padding: 0 .9rem;
       outline: none;
-      font-size: 16px;
+
+      line-height: 60px;
+      text-overflow: ellipsis;
 
       border-radius: calc(0.5 * var(--cr-realbox-height));;
       color: var(--color-realbox-foreground);
@@ -132,6 +135,9 @@ onMounted(() => {
       min-width: 300px;
 
       position: relative;
+
+      font-family: inherit;
+      font-size: inherit;
 
     }
 
