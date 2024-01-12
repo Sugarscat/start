@@ -11,7 +11,7 @@ const props = defineProps<{
 
 <template>
   <div class="drawer" :class="{close: !props.visible}">
-    <div class="drawer-content" :class="{open: props.visible}">
+    <div class="drawer-body" :class="{open: props.visible}">
       <div class="title">
       <span>
         <slot name="title"></slot>
@@ -20,7 +20,9 @@ const props = defineProps<{
           <close-icon/>
         </div>
       </div>
-      <slot name="content"></slot>
+      <div class="content">
+        <slot name="content"></slot>
+      </div>
     </div>
     <div class="drawer-backdrop" @click="props.onClose()"></div>
   </div>
@@ -70,7 +72,7 @@ const props = defineProps<{
     }
   }
 
-  .drawer-content {
+  .drawer-body {
     animation: drawer-content-close 0.3s ease-in-out;
   }
 }
@@ -86,7 +88,7 @@ const props = defineProps<{
   transition: all 0.25s ease-in-out;
 }
 
-.drawer-content {
+.drawer-body {
   position: absolute;
   top: 0;
   right: 0;
@@ -98,6 +100,9 @@ const props = defineProps<{
   background: var(--color-background);
   box-shadow: var(--shadow);
 
+  display: flex;
+  flex-direction: column;
+
   &.open {
     animation: drawer-open 0.3s ease-in-out;
   }
@@ -105,6 +110,19 @@ const props = defineProps<{
   @media screen and (max-width: 500px) {
     width: 100%;
     border-radius: 0;
+  }
+
+  .content {
+    height: 100%;
+    background-color: var(--el-color-info-light-8);
+    padding: 10px;
+    border-radius: 20px;
+
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 }
 
