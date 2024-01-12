@@ -68,6 +68,10 @@ const props = defineProps<{
       width: 360px;
     }
 
+    @media (max-width: 360px) {
+      width: 340px;
+    }
+
     &.open {
       animation: dialog-open 0.3s ease-in-out;
     }
@@ -96,10 +100,6 @@ const props = defineProps<{
         font-size: 16px;
         font-weight: bold;
       }
-    }
-
-    .content {
-
     }
 
     .dialog-operation {

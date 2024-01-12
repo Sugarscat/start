@@ -563,10 +563,18 @@ const deleteBackground = (i: number) => {
       border-radius: 4px;
       outline: none;
 
+      text-overflow: ellipsis;
+      font-family: inherit;
+      font-size: inherit;
+
       color: var(--color-text);
 
       @media (max-width: 410px) {
         width: 280px;
+      }
+
+      @media (max-width: 360px) {
+        width: 260px;
       }
 
       &.error {

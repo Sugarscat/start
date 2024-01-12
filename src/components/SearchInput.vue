@@ -132,7 +132,7 @@ onMounted(() => {
 
       height: 100%;
       width: 100%;
-      min-width: 300px;
+      min-width: 200px;
 
       position: relative;
 
@@ -162,7 +162,7 @@ onMounted(() => {
 
   @media (max-width: 600px) {
     .search-input-area {
-      min-width: 340px;
+      min-width: 200px;
       width: 100%;
     }
   }
