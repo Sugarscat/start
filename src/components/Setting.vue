@@ -556,7 +556,7 @@ const deleteBackground = (i: number) => {
     input {
       flex: 1;
       height: 45px;
-      width: 325px;
+      width: 320px;
       line-height: 45px;
       padding: 0 10px;
       border: 1.5px solid var(--el-color-info-light-3);
@@ -566,7 +566,7 @@ const deleteBackground = (i: number) => {
       color: var(--color-text);
 
       @media (max-width: 410px) {
-        width: 285px;
+        width: 280px;
       }
 
       &.error {
