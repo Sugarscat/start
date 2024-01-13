@@ -1,10 +1,10 @@
-# search
+# Search
 
 ## Description
 
 一个浏览器起始页。
 
-在线地址：[搜索](https://search.sugarscat.com)
+在线地址：[https://search.sugarscat.com](https://search.sugarscat.com)
 
 ## Notice
 
