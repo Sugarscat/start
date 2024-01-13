@@ -564,8 +564,6 @@ const deleteBackground = (i: number) => {
       outline: none;
 
       text-overflow: ellipsis;
-      font-family: inherit;
-      font-size: inherit;
 
       color: var(--color-text);
 
