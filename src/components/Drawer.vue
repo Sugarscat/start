@@ -1,22 +1,88 @@
 <script setup lang="ts">
 
 import CloseIcon from "@/components/icons/CloseIcon.vue";
+import {onMounted, ref, watch} from "vue";
+import gsap from "gsap";
 
-const props = defineProps<{
-  visible: boolean,
-  onClose: () => void,
-}>()
+const model = defineModel()
+
+watch(() => model.value, (value) => {
+  if (value) {
+    openAnimation()
+  } else {
+    closeAnimation()
+  }
+})
+
+const drawer = ref()
+const body = ref()
+const backdrop = ref()
+const timeline = gsap.timeline()
+
+const close = () => {
+  model.value = false
+}
+
+const openAnimation = () => {
+  timeline.set(drawer.value, {
+    display: "block",
+  })
+
+  timeline.fromTo(body.value, {
+    right: "-400px",
+  }, {
+    right: 0,
+    duration: 0.3,
+    ease: "power1.out",
+  })
+
+  timeline.set(backdrop.value, {
+    opacity: 1,
+    duration: 0.3,
+    ease: "power1.out",
+  }, "<")
+}
+
+const closeAnimation = () => {
+  timeline.fromTo(body.value, {
+    right: 0,
+  }, {
+    right: "-400px",
+    duration: 0.3,
+    ease: "power1.out"
+  })
+
+  timeline.set(backdrop.value, {
+    opacity: 0,
+    duration: 0.3,
+    ease: "power1.out",
+  }, "<")
+
+  timeline.set(drawer.value, {
+    display: "none",
+  })
+}
+
+onMounted(()=>{
+  if (model.value) {
+    openAnimation()
+  } else {
+    gsap.set(drawer.value, {
+      display: "none",
+    })
+  }
+})
 
 </script>
 
 <template>
-  <div class="drawer" :class="{close: !props.visible}">
-    <div class="drawer-body" :class="{open: props.visible}">
+  <div class="drawer" ref="drawer">
+    <div class="drawer-body" ref="body">
       <div class="title">
       <span>
         <slot name="title"></slot>
       </span>
-        <div class="close-operation" @click="props.onClose()">
+        <div class="close-operation" @click="close()">
           <close-icon/>
         </div>
       </div>
@@ -24,7 +90,7 @@ const props = defineProps<{
         <slot name="content"></slot>
       </div>
     </div>
-    <div class="drawer-backdrop" @click="props.onClose()"></div>
+    <div class="drawer-backdrop" @click="close()" ref="backdrop"></div>
   </div>
 </template>
 
@@ -62,19 +128,6 @@ const props = defineProps<{
       }
     }
   }
-
-  &.close {
-    animation: drawer-close 0.3s ease-in-out;
-    display: none;
-
-    .drawer-backdrop {
-      opacity: 0;
-    }
-  }
-
-  .drawer-body {
-    animation: drawer-content-close 0.3s ease-in-out;
-  }
 }
 
 .drawer-backdrop {
@@ -85,7 +138,7 @@ const props = defineProps<{
   left: 0;
   background-color: var(--el-overlay-color-lighter);
 
-  transition: all 0.25s ease-in-out;
+  transition: opacity 0.25s ease-in-out;
 }
 
 .drawer-body {
@@ -103,10 +156,6 @@ const props = defineProps<{
   display: flex;
   flex-direction: column;
 
-  &.open {
-    animation: drawer-open 0.3s ease-in-out;
-  }
-
   @media screen and (max-width: 500px) {
     width: 100%;
     border-radius: 0;
@@ -123,36 +172,6 @@ const props = defineProps<{
     &::-webkit-scrollbar {
       display: none;
     }
-  }
-}
-
-@keyframes drawer-open {
-  0% {
-    transform: translateX(100%);
-  }
-
-  100% {
-    transform: translateX(0);
-  }
-}
-
-@keyframes drawer-close {
-  0% {
-    display: block;
-  }
-
-  100% {
-    display: none;
-  }
-}
-
-@keyframes drawer-content-close {
-  0% {
-    transform: translateX(0);
-  }
-
-  100% {
-    transform: translateX(100%);
   }
 }
 </style>
