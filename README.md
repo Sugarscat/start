@@ -4,7 +4,7 @@
 
 一个浏览器起始页。
 
-在线地址：[https://search.sugarscat.com](https://search.sugarscat.com)
+在线地址：[https://start.sugarscat.com](https://start.sugarscat.com)
 
 ## Notice
 
