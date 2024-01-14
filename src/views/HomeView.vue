@@ -1,26 +1,19 @@
 <script setup lang="ts">
 
+import {ref} from "vue";
 import SearchInput from "@/components/SearchInput.vue";
 import Setting from "@/components/Setting.vue";
 import Drawer from "@/components/Drawer.vue";
-import {ref} from "vue";
 import SettingIcon from "@/components/icons/SettingIcon.vue";
 import Background from "@/components/Background.vue";
 
-const isOpen = ref(false);
+const visible = ref(false);
 
-const openDrawer = () => {
-  isOpen.value = true;
-}
-
-const closeDrawer = () => {
-  isOpen.value = false;
-}
 </script>
 
 <template>
   <Background/>
-  <div @click="openDrawer" class="setting-btn">
+  <div @click="visible = true" class="setting-btn">
     <setting-icon/>
   </div>
 
@@ -28,14 +21,14 @@ const closeDrawer = () => {
   <search-input/>
   <div class="occupancy bottom"></div>
 
-  <drawer :on-close="closeDrawer" :visible="isOpen">
+  <Drawer v-model="visible">
     <template #title>
       设置
     </template>
     <template #content>
       <setting/>
     </template>
-  </drawer>
+  </Drawer>
 </template>
 
 <style scoped lang="scss">
