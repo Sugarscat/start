@@ -65,11 +65,9 @@ const closeAnimation = () => {
 
 onMounted(()=>{
   if (model.value) {
-    openAnimation()
+    drawer.value.style.display = "block"
   } else {
-    gsap.set(drawer.value, {
-      display: "none",
-    })
+    drawer.value.style.display = "none"
   }
 })
 

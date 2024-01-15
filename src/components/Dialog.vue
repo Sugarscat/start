@@ -1,21 +1,88 @@
 <script setup lang="ts">
 import CloseIcon from "@/components/icons/CloseIcon.vue";
+import {onMounted, ref, watch} from "vue";
+import gsap from "gsap";
 
 const props = defineProps<{
-  visible: boolean,
-  onClose: () => void,
   onSure: () => void,
 }>()
+
+const model = defineModel()
+
+watch(() => model.value, (value) => {
+  if (value) {
+    openAnimation()
+  } else {
+    closeAnimation()
+  }
+})
+
+const dialog = ref()
+const body = ref()
+const backdrop = ref()
+
+const timeline = gsap.timeline()
+
+const close = () => {
+  model.value = false
+}
+
+const openAnimation = () => {
+  timeline.set(dialog.value, {
+    display: "flex",
+  })
+
+  timeline.fromTo(body.value, {
+    y: "80vh",
+  }, {
+    y: 0,
+    duration: 0.3,
+    ease: "power1.out",
+  })
+
+  timeline.set(backdrop.value, {
+    opacity: 1,
+    duration: 0.3,
+    ease: "power1.out",
+  }, "<")
+}
+
+const closeAnimation = () => {
+  timeline.fromTo(body.value, {
+    y: 0,
+  }, {
+    y: "80vh",
+    duration: 0.3,
+    ease: "power1.out"
+  })
+
+  timeline.set(backdrop.value, {
+    opacity: 0,
+    duration: 0.3,
+    ease: "power1.out",
+  }, "<")
+
+  timeline.set(dialog.value, {
+    display: "none",
+  })
+}
+
+onMounted(() => {
+  if (model.value)
+    dialog.value.style.display = "flex"
+  else
+    dialog.value.style.display = "none"
+})
 </script>
 
 <template>
-  <div class="dialog" :class="{close: !props.visible}">
-    <div class="dialog-body" :class="{open: props.visible}">
+  <div class="dialog" ref="dialog">
+    <div class="dialog-body" ref="body">
       <div class="title">
         <span>
           <slot name="title"></slot>
         </span>
-        <div class="close-operation" @click="props.onClose()">
+        <div class="close-operation" @click="close">
           <close-icon/>
         </div>
       </div>
@@ -26,7 +93,7 @@ const props = defineProps<{
         <button @click="props.onSure()">确认</button>
       </div>
     </div>
-    <div class="dialog-backdrop" @click="props.onClose()"></div>
+    <div class="dialog-backdrop" @click="close" ref="backdrop"></div>
   </div>
 </template>
 
@@ -38,22 +105,14 @@ const props = defineProps<{
   width: 100%;
   height: 100%;
 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   z-index: 1;
-
-  &.close {
-    animation: dialog-close 0.3s ease-in-out;
-    display: none;
-
-    .dialog-backdrop {
-      opacity: 0;
-    }
-  }
 
   .dialog-body {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     width: 400px;
     padding: 15px;
     border-radius: 10px;
@@ -62,18 +121,12 @@ const props = defineProps<{
 
     z-index: 99;
 
-    animation: dialog-content-close 0.3s ease-in-out;
-
     @media (max-width: 410px) {
       width: 360px;
     }
 
     @media (max-width: 360px) {
       width: 340px;
-    }
-
-    &.open {
-      animation: dialog-open 0.3s ease-in-out;
     }
 
     .title {
@@ -142,36 +195,6 @@ const props = defineProps<{
     transition: all 0.25s ease-in-out;
 
     z-index: 0;
-  }
-}
-
-@keyframes dialog-open {
-  0% {
-    transform: translate(-50%, 200%);
-  }
-
-  100% {
-    transform: translate(-50%, -50%);
-  }
-}
-
-@keyframes dialog-close {
-  0% {
-    display: block;
-  }
-
-  100% {
-    display: none;
-  }
-}
-
-@keyframes dialog-content-close {
-  0% {
-    transform: translate(-50%, -50%);
-  }
-
-  100% {
-    transform: translate(-50%, 200%);
   }
 }
 </style>

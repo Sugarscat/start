@@ -284,8 +284,7 @@ const deleteBackground = (i: number) => {
     </div>
   </div>
 
-  <Dialog :on-close="closeEngineDialog"
-          :visible="engineDialogVisible"
+  <Dialog v-model="engineDialogVisible"
           :on-sure="engineOnSure">
     <template #title>
       {{title}}
@@ -335,8 +334,7 @@ const deleteBackground = (i: number) => {
     </template>
   </Dialog>
 
-  <Dialog :on-close="closeBackgroundDialog"
-          :visible="backgroundDialogVisible"
+  <Dialog v-model="backgroundDialogVisible"
           :on-sure="addBackground">
     <template #title>
       添加背景
