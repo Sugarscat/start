@@ -2,7 +2,8 @@
 
 import CloseIcon from "@/components/icons/CloseIcon.vue";
 import {onMounted, ref, watch} from "vue";
-import gsap from "gsap";
+import anime from "animejs";
+
 
 const model = defineModel()
 
@@ -17,55 +18,37 @@ watch(() => model.value, (value) => {
 const drawer = ref()
 const body = ref()
 const backdrop = ref()
-const timeline = gsap.timeline()
+const duration = 300
 
 const close = () => {
   model.value = false
 }
 
 const openAnimation = () => {
-  timeline.set(drawer.value, {
-    display: "block",
+  drawer.value.style.display = "flex"
+  anime({
+    targets: body.value,
+    right: ["-400px", 0],
+    duration: duration,
+    easing: "easeInOutQuad",
   })
-
-  timeline.fromTo(body.value, {
-    right: "-400px",
-  }, {
-    right: 0,
-    duration: 0.3,
-    ease: "power1.out",
-  })
-
-  timeline.set(backdrop.value, {
-    opacity: 1,
-    duration: 0.3,
-    ease: "power1.out",
-  }, "<")
 }
 
 const closeAnimation = () => {
-  timeline.fromTo(body.value, {
-    right: 0,
-  }, {
-    right: "-400px",
-    duration: 0.3,
-    ease: "power1.out"
-  })
-
-  timeline.set(backdrop.value, {
-    opacity: 0,
-    duration: 0.3,
-    ease: "power1.out",
-  }, "<")
-
-  timeline.set(drawer.value, {
-    display: "none",
+  anime({
+    targets: body.value,
+    right: [0, "-400px"],
+    duration: duration,
+    easing: "easeInOutQuad",
+    complete: () => {
+      drawer.value.style.display = "none"
+    }
   })
 }
 
 onMounted(()=>{
   if (model.value) {
-    drawer.value.style.display = "block"
+    drawer.value.style.display = "flex"
   } else {
     drawer.value.style.display = "none"
   }
@@ -74,7 +57,7 @@ onMounted(()=>{
 </script>
 
 <template>
-  <div class="drawer" ref="drawer">
+  <div class="drawer" ref="drawer" :class="{close:!model}">
     <div class="drawer-body" ref="body">
       <div class="title">
       <span>
@@ -101,6 +84,9 @@ onMounted(()=>{
   height: 100%;
   z-index: 1;
 
+  display: flex;
+  justify-content: flex-end;
+
   .title {
     display: flex;
     align-items: center;
@@ -126,49 +112,54 @@ onMounted(()=>{
       }
     }
   }
-}
 
-.drawer-backdrop {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  background-color: var(--el-overlay-color-lighter);
-
-  transition: opacity 0.25s ease-in-out;
-}
-
-.drawer-body {
-  position: absolute;
-  top: 0;
-  right: 0;
-  height: 100%;
-  z-index: 10;
-  width: 400px;
-  padding: 15px;
-  border-radius: 15px 0 0 15px;
-  background: var(--color-background);
-  box-shadow: var(--shadow);
-
-  display: flex;
-  flex-direction: column;
-
-  @media screen and (max-width: 500px) {
-    width: 100%;
-    border-radius: 0;
+  &.close {
+    .drawer-backdrop {
+      opacity: 0;
+    }
   }
 
-  .content {
+  .drawer-backdrop {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background-color: var(--el-overlay-color-lighter);
+
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  .drawer-body {
     height: 100%;
-    background-color: var(--el-color-info-light-8);
-    padding: 10px;
-    border-radius: 20px;
+    z-index: 10;
+    width: 400px;
+    padding: 15px;
+    border-radius: 15px 0 0 15px;
+    background: var(--color-background);
+    box-shadow: var(--shadow);
 
-    overflow-y: auto;
+    position: absolute;
 
-    &::-webkit-scrollbar {
-      display: none;
+    display: flex;
+    flex-direction: column;
+
+    @media screen and (max-width: 500px) {
+      width: 100%;
+      border-radius: 0;
+    }
+
+    .content {
+      height: 100%;
+      background-color: var(--el-color-info-light-8);
+      padding: 10px;
+      border-radius: 20px;
+
+      overflow-y: auto;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
     }
   }
 }

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import CloseIcon from "@/components/icons/CloseIcon.vue";
 import {onMounted, ref, watch} from "vue";
-import gsap from "gsap";
+import anime from "animejs";
 
 const props = defineProps<{
   onSure: () => void,
@@ -20,50 +20,32 @@ watch(() => model.value, (value) => {
 const dialog = ref()
 const body = ref()
 const backdrop = ref()
+const duration = 300
 
-const timeline = gsap.timeline()
 
 const close = () => {
   model.value = false
 }
 
 const openAnimation = () => {
-  timeline.set(dialog.value, {
-    display: "flex",
+  dialog.value.style.display = "flex"
+  anime({
+    targets: body.value,
+    translateY: ["100vh", 0],
+    duration: duration,
+    easing: "easeInOutQuad",
   })
-
-  timeline.fromTo(body.value, {
-    y: "80vh",
-  }, {
-    y: 0,
-    duration: 0.3,
-    ease: "power1.out",
-  })
-
-  timeline.set(backdrop.value, {
-    opacity: 1,
-    duration: 0.3,
-    ease: "power1.out",
-  }, "<")
 }
 
 const closeAnimation = () => {
-  timeline.fromTo(body.value, {
-    y: 0,
-  }, {
-    y: "80vh",
-    duration: 0.3,
-    ease: "power1.out"
-  })
-
-  timeline.set(backdrop.value, {
-    opacity: 0,
-    duration: 0.3,
-    ease: "power1.out",
-  }, "<")
-
-  timeline.set(dialog.value, {
-    display: "none",
+  anime({
+    targets: body.value,
+    translateY: [0, "100vh"],
+    duration: duration,
+    easing: "easeInOutQuad",
+    complete: () => {
+      dialog.value.style.display = "none"
+    }
   })
 }
 
@@ -76,7 +58,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="dialog" ref="dialog">
+  <div class="dialog" ref="dialog" :class="{close:!model}">
     <div class="dialog-body" ref="body">
       <div class="title">
         <span>
@@ -133,14 +115,12 @@ onMounted(() => {
       display: flex;
       align-items: center;
       justify-content: space-between;
-
       margin-bottom: 20px;
 
       .close-operation {
         display: flex;
         align-items: center;
         justify-content: space-between;
-
         cursor: pointer;
 
         svg {
@@ -163,13 +143,10 @@ onMounted(() => {
       button {
         height: 35px;
         width: 90px;
-
         border: 2px solid var(--el-color-primary-light-3);
         background-color: var(--el-color-primary-light-8);
         border-radius: 5px;
-
         cursor: pointer;
-
         transition: all 0.1s ease-in-out;
 
         font-size: .8rem;
@@ -184,6 +161,12 @@ onMounted(() => {
     }
   }
 
+  &.close {
+    .dialog-backdrop {
+      opacity: 0;
+    }
+  }
+
   .dialog-backdrop {
     position: absolute;
     top: 0;
@@ -191,9 +174,7 @@ onMounted(() => {
     right: 0;
     left: 0;
     background-color: var(--el-overlay-color-lighter);
-
-    transition: all 0.25s ease-in-out;
-
+    transition: opacity 0.25s ease-in-out;
     z-index: 0;
   }
 }
