@@ -52,10 +52,6 @@ const deleteEngine = (number: number) => {
   engineListStore.deleteEngine(number)
 }
 
-const openEngineDialog = () => {
-  engineDialogVisible.value = true;
-}
-
 const closeEngineDialog = () => {
   engineDialogVisible.value = false;
   reset()
@@ -81,8 +77,9 @@ const reset = () => {
 }
 
 const addEngine = () => {
+  reset()
   title.value = '添加搜索引擎'
-  openEngineDialog()
+  engineDialogVisible.value = true;
 }
 
 const doAddEngine = () => {
@@ -91,6 +88,7 @@ const doAddEngine = () => {
 }
 
 const updateEngine = (i: number, value: any) => {
+  reset()
   value = {
     name: value.name,
     url: value.url,
@@ -100,7 +98,7 @@ const updateEngine = (i: number, value: any) => {
   title.value = '修改搜索引擎'
   index.value = i
   engine.value = value
-  openEngineDialog()
+  engineDialogVisible.value = true;
 }
 
 const doUpdateEngine = () => {
@@ -144,6 +142,7 @@ const verifyEngine = () => {
 }
 
 const openBackgroundDialog = ()=> {
+  reset()
   backgroundDialogVisible.value = true
 }
 
@@ -192,11 +191,13 @@ const deleteBackground = (i: number) => {
                :class="{active: engineStore.engine === engine.url}"
                @click="engineStore.engine = engine.url"
           >
+            <div class="engine-operation left" v-if="isEngineOperation&&engine.revise" @click.stop>
+              <edit-icon @click="updateEngine(number, engine)"/>
+            </div>
             <div class="engine-icon"
                  :style="{backgroundImage: `url(${engine.icon})`}"></div>
             <div class="text">{{engine.name}}</div>
             <div class="engine-operation" v-if="isEngineOperation&&engine.revise" @click.stop>
-              <edit-icon @click="updateEngine(number, engine)"/>
               <delete-icon @click="deleteEngine(number)"/>
             </div>
           </div>
@@ -423,14 +424,15 @@ const deleteBackground = (i: number) => {
           .engine-operation {
             display: flex;
             align-items: center;
-            gap: 5px;
-            margin-left: 10px;
             flex-direction: row;
-
-            border-radius: 12px;
 
             position: relative;
             right: -5px;
+
+            &.left {
+              left: -5px;
+              margin-right: 1px;
+            }
 
             //background-color: var(--el-color-primary-light-7);
 
