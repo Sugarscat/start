@@ -26,7 +26,7 @@ const visible = ref(false);
       设置
     </template>
     <template #content>
-      <setting/>
+      <Setting/>
     </template>
   </Drawer>
 </template>

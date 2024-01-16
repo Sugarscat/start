@@ -8,9 +8,9 @@ dependencies:
   '@vueuse/core':
     specifier: ^10.7.1
     version: 10.7.1(vue@3.4.0)
-  gsap:
-    specifier: ^3.12.4
-    version: 3.12.4
+  animejs:
+    specifier: ^3.2.2
+    version: 3.2.2
   pinia:
     specifier: ^2.1.7
     version: 2.1.7(typescript@5.3.3)(vue@3.4.0)
@@ -25,6 +25,9 @@ devDependencies:
   '@tsconfig/node18':
     specifier: ^18.2.2
     version: 18.2.2
+  '@types/animejs':
+    specifier: ^3.1.12
+    version: 3.1.12
   '@types/node':
     specifier: ^18.19.3
     version: 18.19.3
@@ -415,6 +418,10 @@ packages:
     resolution: {integrity: sha512-d6McJeGsuoRlwWZmVIeE8CUA27lu6jLjvv1JzqmpsytOYYbVi1tHZEnwCNVOXnj4pyLvneZlFlpXUK+X9wBWyw==, tarball: https://registry.npmmirror.com/@tsconfig/node18/-/node18-18.2.2.tgz}
     dev: true
 
+  /@types/animejs@3.1.12:
+    resolution: {integrity: sha512-fpdH+ZtlO0kqjTOqRaBdsEmvpRNOayI8k4EVkEtitL5l6wducDOXk0rgQgfZqWf/ZX9DzXrHf257S5i9xTcISQ==, tarball: https://registry.npmmirror.com/@types/animejs/-/animejs-3.1.12.tgz}
+    dev: true
+
   /@types/node@18.19.3:
     resolution: {integrity: sha512-k5fggr14DwAytoA/t8rPrIz++lXK7/DqckthCmoZOKNsEbJkId4Z//BqgApXBUGrGddrigYa1oqheo/7YmW4rg==, tarball: https://registry.npmmirror.com/@types/node/-/node-18.19.3.tgz}
     dependencies:
@@ -574,6 +581,10 @@ packages:
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
+    dev: false
+
+  /animejs@3.2.2:
+    resolution: {integrity: sha512-Ao95qWLpDPXXM+WrmwcKbl6uNlC5tjnowlaRYtuVDHHoygjtIPfDUoK9NthrlZsQSKjZXlmji2TrBUAVbiH0LQ==, tarball: https://registry.npmmirror.com/animejs/-/animejs-3.2.2.tgz}
     dev: false
 
   /ansi-styles@3.2.1:
@@ -746,10 +757,6 @@ packages:
     dependencies:
       is-glob: 4.0.3
     dev: true
-
-  /gsap@3.12.4:
-    resolution: {integrity: sha512-1ByAq8dD0W4aBZ/JArgaQvc0gyUfkGkP8mgAQa0qZGdpOKlSOhOf+WNXjoLimKaKG3Z4Iu6DKZtnyszqQeyqWQ==, tarball: https://registry.npmmirror.com/gsap/-/gsap-3.12.4.tgz}
-    dev: false
 
   /has-flag@3.0.0:
     resolution: {integrity: sha512-sKJf1+ceQBr4SMkvQnBDNDtf4TXpVhVGateu0t918bl30FnbE2m4vNLX+VWe/dpjlb+HugGYzW7uQXH98HPEYw==, tarball: https://registry.npmmirror.com/has-flag/-/has-flag-3.0.0.tgz}

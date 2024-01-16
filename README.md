@@ -10,6 +10,8 @@
 
 颜色主题来自 [Element Plus](https://element-plus.org)
 
+动画库 [animejs](https://animejs.com)
+
 ## Project Setup
 
 ```sh
