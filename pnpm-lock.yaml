@@ -33,7 +33,7 @@ devDependencies:
     version: 18.19.3
   '@vitejs/plugin-vue':
     specifier: ^4.5.2
-    version: 4.6.0(vite@5.0.10)(vue@3.4.0)
+    version: 4.6.0(vite@5.1.1)(vue@3.4.0)
   '@vue/tsconfig':
     specifier: ^0.5.0
     version: 0.5.1
@@ -47,8 +47,8 @@ devDependencies:
     specifier: ~5.3.0
     version: 5.3.3
   vite:
-    specifier: ^5.0.10
-    version: 5.0.10(@types/node@18.19.3)(sass@1.69.6)
+    specifier: ^5.0.12
+    version: 5.1.1(@types/node@18.19.3)(sass@1.69.6)
   vue-tsc:
     specifier: ^1.8.25
     version: 1.8.27(typescript@5.3.3)
@@ -436,14 +436,14 @@ packages:
     resolution: {integrity: sha512-g9gZnnXVq7gM7v3tJCWV/qw7w+KeOlSHAhgF9RytFyifW6AF61hdT2ucrYhPq9hLs5JIryeupHV3qGk95dH9ow==, tarball: https://registry.npmmirror.com/@types/web-bluetooth/-/web-bluetooth-0.0.20.tgz}
     dev: false
 
-  /@vitejs/plugin-vue@4.6.0(vite@5.0.10)(vue@3.4.0):
+  /@vitejs/plugin-vue@4.6.0(vite@5.1.1)(vue@3.4.0):
     resolution: {integrity: sha512-XHuyFdAikWRmHuAd89FOyUGIjrBU5KlxJtyi2hVeR9ySGFxQwE0bl5xAQju/ArMq5azdBivY4d+D2yPKwoYWUg==, tarball: https://registry.npmmirror.com/@vitejs/plugin-vue/-/plugin-vue-4.6.0.tgz}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
       vite: ^4.0.0 || ^5.0.0
       vue: ^3.2.25
     dependencies:
-      vite: 5.0.10(@types/node@18.19.3)(sass@1.69.6)
+      vite: 5.1.1(@types/node@18.19.3)(sass@1.69.6)
       vue: 3.4.0(typescript@5.3.3)
     dev: true
 
@@ -974,6 +974,15 @@ packages:
       picocolors: 1.0.0
       source-map-js: 1.0.2
 
+  /postcss@8.4.35:
+    resolution: {integrity: sha512-u5U8qYpBCpN13BsiEB0CbR1Hhh4Gc0zLFuedrHJKMctHCHAGrMdG0PRM/KErzAL3CU6/eckEtmHNB3x6e3c0vA==, tarball: https://registry.npmmirror.com/postcss/-/postcss-8.4.35.tgz}
+    engines: {node: ^10 || ^12 || >=14}
+    dependencies:
+      nanoid: 3.3.7
+      picocolors: 1.0.0
+      source-map-js: 1.0.2
+    dev: true
+
   /read-pkg@8.1.0:
     resolution: {integrity: sha512-PORM8AgzXeskHO/WEv312k9U03B8K9JSiWF/8N9sUuFjBa+9SF2u6K7VClzXwDXab51jCd8Nd36CNM+zR97ScQ==, tarball: https://registry.npmmirror.com/read-pkg/-/read-pkg-8.1.0.tgz}
     engines: {node: '>=16'}
@@ -1116,8 +1125,8 @@ packages:
       spdx-expression-parse: 3.0.1
     dev: true
 
-  /vite@5.0.10(@types/node@18.19.3)(sass@1.69.6):
-    resolution: {integrity: sha512-2P8J7WWgmc355HUMlFrwofacvr98DAjoE52BfdbwQtyLH06XKwaL/FMnmKM2crF0iX4MpmMKoDlNCB1ok7zHCw==, tarball: https://registry.npmmirror.com/vite/-/vite-5.0.10.tgz}
+  /vite@5.1.1(@types/node@18.19.3)(sass@1.69.6):
+    resolution: {integrity: sha512-wclpAgY3F1tR7t9LL5CcHC41YPkQIpKUGeIuT8MdNwNZr6OqOTLs7JX5vIHAtzqLWXts0T+GDrh9pN2arneKqg==, tarball: https://registry.npmmirror.com/vite/-/vite-5.1.1.tgz}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
     peerDependencies:
@@ -1146,7 +1155,7 @@ packages:
     dependencies:
       '@types/node': 18.19.3
       esbuild: 0.19.10
-      postcss: 8.4.32
+      postcss: 8.4.35
       rollup: 4.9.1
       sass: 1.69.6
     optionalDependencies:
