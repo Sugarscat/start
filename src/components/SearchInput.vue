@@ -13,36 +13,20 @@ const inputValue = ref('');
 
 const isValidUrl = (url: string): number => {
   // 使用正则表达式匹配网址的模式
-  const noHttpUrlRegex: string = "(([0-9]{1,3}\.){3}[0-9]{1,3}" // IP形式的URL- 199.194.52.184
-      + "|" // 允许IP和DOMAIN（域名）
-      + "([0-9a-z_!~*'()-]+\.)*" // 域名- www.
-      + "([0-9a-z][0-9a-z-]{0,61})?[0-9a-z]\." // 二级域名
-      + "[a-z]{2,6})" // first level domain- .com or .museum
-      + "(:[0-9]{1,4})?" // 端口- :80
-      + "((/?)|" // a slash isn't required if there is no file name
-      + "(/[0-9a-z_!~*'().;?:@&=+$,%#-]+)+/?)$";
+  const noHttpUrlRegex: string = "^([a-zA-Z0-9]([a-zA-Z0-9\\-]{0,61}[a-zA-Z0-9])?\\.)+[a-zA-Z]{2,6}$";
 
-  const hasHttpRegex: string = "^((https|http|ftp|rtsp|mms)://)"
-      + "?(([0-9a-z_!~*'().&=+$%-]+: )?[0-9a-z_!~*'().&=+$%-]+@)?" //ftp的user@
-      + "(([0-9]{1,3}\.){3}[0-9]{1,3}" // IP形式的URL- 199.194.52.184
-      + "|" // 允许IP和DOMAIN（域名）
-      + "([0-9a-z_!~*'()-]+\.)*" // 域名- www.
-      + "([0-9a-z][0-9a-z-]{0,61})?[0-9a-z]\." // 二级域名
-      + "[a-z]{2,6})" // first level domain- .com or .museum
-      + "(:[0-9]{1,4})?" // 端口- :80
-      + "((/?)|" // a slash isn't required if there is no file name
-      + "(/[0-9a-z_!~*'().;?:@&=+$,%#-]+)+/?)$";
+  const hasHttpRegex: string = "(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]";
 
   const re1 = new RegExp(noHttpUrlRegex);
   const re2 = new RegExp(hasHttpRegex);
+
   // 返回正则表达式匹配成功的结果
-  if (re1.test(url)) {
+  if (re1.test(url))
     return 1;
-  } else if (re2.test(url)) {
+  else if (re2.test(url))
     return 2;
-  } else {
+  else
     return 0;
-  }
 }
 
 const doSearch = () => {
@@ -55,7 +39,7 @@ const doSearch = () => {
     console.log(re)
     switch (re) {
       case 1:
-        location.href = 'http://' + inputValue.value;
+        location.href = 'https://' + inputValue.value;
         break;
       case 2:
         location.href =  inputValue.value;
