@@ -34,7 +34,7 @@ const doSearch = () => {
   if (!engineStore.engine)
     engineStore.setEngine(engineListStore.engines[0].url);
 
-  if (inputValue.value) {
+  if (inputValue.value.length) {
     const re = isValidUrl(inputValue.value)
     console.log(re)
     switch (re) {
@@ -47,8 +47,6 @@ const doSearch = () => {
       default:
         location.href = engineStore.engine + inputValue.value;
     }
-  } else {
-    location.href = engineStore.engine + inputValue.value;
   }
 }
 
