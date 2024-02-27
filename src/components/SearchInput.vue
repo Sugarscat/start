@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {defineComponent, onMounted, ref} from 'vue'
+import {defineComponent, onMounted, ref, watch} from 'vue'
 import {useEngineStore} from "@/stores/engine";
 import {useEngineListStore} from "@/stores/engineList";
 
@@ -10,6 +10,7 @@ defineComponent({
 const engineStore = useEngineStore();
 const engineListStore = useEngineListStore();
 const inputValue = ref('');
+const iconDom = ref()
 
 const isValidUrl = (url: string): number => {
   // 使用正则表达式匹配网址的模式
@@ -29,10 +30,15 @@ const isValidUrl = (url: string): number => {
     return 0;
 }
 
+watch(engineStore, ()=>{
+  if (iconDom)
+    iconDom.value.style.backgroundImage = `url(${engineStore.engine.icon})`
+})
+
 const doSearch = () => {
 
   if (!engineStore.engine)
-    engineStore.setEngine(engineListStore.engines[0].url);
+    engineStore.setEngine(engineListStore.engines[0].url, engineListStore.engines[0].icon);
 
   if (inputValue.value.length) {
     const re = isValidUrl(inputValue.value)
@@ -52,13 +58,14 @@ const doSearch = () => {
 
 onMounted(() => {
   if (!engineStore.engine)
-    engineStore.setEngine(engineListStore.engines[0].url);
+    engineStore.setEngine(engineListStore.engines[0].url, engineListStore.engines[0].icon);
+  iconDom.value.style.backgroundImage = `url(${engineStore.engine.icon})`
 })
 </script>
 
 <template>
   <div class="search-input-area">
-    <div id="icon"></div>
+    <div id="icon" ref="iconDom"></div>
     <input class="search-input"
            v-model="inputValue"
            placeholder="回车探索世界，或输入网址"
@@ -86,15 +93,9 @@ onMounted(() => {
     }
 
     #icon {
-      background-color: var(--color-realbox-search-icon-background);
       background-position: center center;
       background-repeat: no-repeat;
-      background-size: 16px;
-
-      -webkit-mask-image: url(/images/icon_search.svg);
-      -webkit-mask-size: 25px;
-      -webkit-mask-position: center;
-      -webkit-mask-repeat: no-repeat;
+      background-size: 20px;
 
       height: 24px;
       width: 24px;
