@@ -47,7 +47,7 @@ const backgroundUrlInput = ref()
 
 const deleteEngine = (number: number) => {
   if (engineStore.engine === engineListStore.engines[number].url) {
-    engineStore.setEngine(engineListStore.engines[0].url)
+    engineStore.setEngine(engineListStore.engines[0].url, engineListStore.engines[0].icon)
   }
   engineListStore.deleteEngine(number)
 }
@@ -188,8 +188,8 @@ const deleteBackground = (i: number) => {
           <div class="content-item-engine"
                v-for="(engine, number) in engineListStore.engines"
                :key="engine.name"
-               :class="{active: engineStore.engine === engine.url}"
-               @click="engineStore.engine = engine.url"
+               :class="{active: engineStore.engine.url === engine.url}"
+               @click="engineStore.engine = {url:engine.url, icon:engine.icon}"
           >
             <div class="engine-operation left" v-if="isEngineOperation&&engine.revise" @click.stop>
               <edit-icon @click="updateEngine(number, engine)"/>
