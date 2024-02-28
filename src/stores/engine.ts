@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 
 export const useEngineStore =
     defineStore('engine', () => {
-        const engine = ref({})
+        const engine = ref({icon: '',url: ''})
 
         const setEngine = (item: string, icon: string) => {
             engine.value = {

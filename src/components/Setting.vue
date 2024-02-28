@@ -46,7 +46,7 @@ const background = ref({
 const backgroundUrlInput = ref()
 
 const deleteEngine = (number: number) => {
-  if (engineStore.engine === engineListStore.engines[number].url) {
+  if (engineStore.engine.url === engineListStore.engines[number].url) {
     engineStore.setEngine(engineListStore.engines[0].url, engineListStore.engines[0].icon)
   }
   engineListStore.deleteEngine(number)
