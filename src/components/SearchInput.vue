@@ -51,7 +51,7 @@ const doSearch = () => {
         location.href =  inputValue.value;
         break;
       default:
-        location.href = engineStore.engine + inputValue.value;
+        location.href = engineStore.engine.url + inputValue.value;
     }
   }
 }
