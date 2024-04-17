@@ -235,7 +235,7 @@ const deleteBackground = (i: number) => {
             <div class="selected">
               <select-icon/>
             </div>
-            <img :src="background.value" class="image" alt="bg"
+            <div :style="`background-image: url('${background.value}')`" class="image"
                  v-if="background.value!==''"
             />
             <div v-else>
@@ -424,6 +424,14 @@ const deleteBackground = (i: number) => {
         padding: 0;
         position: relative;
         justify-content: center;
+
+        .image {
+          width: 100%;
+          height: 100%;
+          background-size: cover;
+          background-position: center;
+          border-radius: 10px;
+        }
 
         .selected {
           display: none;
