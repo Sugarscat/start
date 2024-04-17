@@ -2,7 +2,7 @@
 
 import {ref} from "vue";
 import SearchInput from "@/components/SearchInput.vue";
-import Setting from "@/components/Setting.vue";
+import Setting from "@/components/Setting";
 import Drawer from "@/components/Drawer.vue";
 import SettingIcon from "@/components/icons/SettingIcon.vue";
 import Background from "@/components/Background.vue";

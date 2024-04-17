@@ -1,18 +1,19 @@
 <script setup lang="ts">
 
-import {onBeforeUnmount, onMounted, ref, watch} from "vue";
-import {useBackgroundStore} from "@/stores/background";
+import {onMounted, ref, watch} from "vue";
+import {useConfigStore} from "@/stores";
+
+const configStore = useConfigStore()
 
 const backgroundHtml = ref();
-const backgroundStore = useBackgroundStore();
 const hasBg = ref(false);
 
 const update = () => {
-  if (backgroundStore.background) {
-    if (!backgroundStore.background.solid) {
-      backgroundHtml.value.style.backgroundImage = `url('${backgroundStore.background.value}')`;
+  if (configStore.getBackground()) {
+    if (!configStore.getBackground().solid) {
+      backgroundHtml.value.style.backgroundImage = `url('${configStore.getBackground().value}')`;
     } else {
-      backgroundHtml.value.style.backgroundColor = backgroundStore.background.value
+      backgroundHtml.value.style.backgroundColor = configStore.getBackground().value
     }
     hasBg.value = true;
   } else {
@@ -24,7 +25,7 @@ const update = () => {
 
 onMounted(() => {
   update()
-  watch(backgroundStore, ()=>{
+  watch(configStore, ()=>{
     update()
   })
 })

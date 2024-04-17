@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import {defineComponent, onMounted, ref, watch} from 'vue'
-import {useEngineStore} from "@/stores/engine";
-import {useEngineListStore} from "@/stores/engineList";
+
+import {useConfigStore, useEngineListStore} from "@/stores";
 
 defineComponent({
   name: "SearchInput",
 })
 
-const engineStore = useEngineStore();
+const configStore = useConfigStore()
 const engineListStore = useEngineListStore();
+
 const inputValue = ref('');
 const iconDom = ref()
 
@@ -30,15 +31,15 @@ const isValidUrl = (url: string): number => {
     return 0;
 }
 
-watch(engineStore, ()=>{
+watch(configStore, ()=>{
   if (iconDom)
-    iconDom.value.style.backgroundImage = `url(${engineStore.engine.icon})`
+    iconDom.value.style.backgroundImage = `url(${configStore.getEngine().icon})`
 })
 
 const doSearch = () => {
 
-  if (!engineStore.engine)
-    engineStore.setEngine(engineListStore.engines[0].url, engineListStore.engines[0].icon);
+  if (!configStore.getEngine())
+    configStore.setEngine(engineListStore.getEngine(0));
 
   if (inputValue.value.length) {
     const re = isValidUrl(inputValue.value)
@@ -51,15 +52,15 @@ const doSearch = () => {
         location.href =  inputValue.value;
         break;
       default:
-        location.href = engineStore.engine.url + inputValue.value;
+        location.href = configStore.getEngine().url + inputValue.value;
     }
   }
 }
 
 onMounted(() => {
-  if (!engineStore.engine)
-    engineStore.setEngine(engineListStore.engines[0].url, engineListStore.engines[0].icon);
-  iconDom.value.style.backgroundImage = `url(${engineStore.engine.icon})`
+  if (!configStore.getEngine())
+    configStore.setEngine(engineListStore.getEngine(0));
+  iconDom.value.style.backgroundImage = `url(${configStore.getEngine().icon})`
 })
 </script>
 
