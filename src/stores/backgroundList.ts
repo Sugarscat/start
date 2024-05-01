@@ -1,34 +1,40 @@
 import {ref} from 'vue'
 import { defineStore } from 'pinia'
 
-export const useBackgroundListStore =
-    defineStore('backgroundList', () => {
+export type Background = {
+  solid: boolean,
+  revise: boolean,
+  value: string
+}
 
-        const backgrounds = ref<{
-            solid: boolean;
-            revise: boolean;
-            value: string
-        }[]>([])
+export const backgrounds:Background[] = [
+  {
+    solid: false,
+    revise: false,
+    value: ''
+  }
+]
 
-        const addBackground = (item: any) => {
-            backgrounds.value.push(item)
-        }
+export const useBackgroundListStore = defineStore('backgroundList', () => {
+  const backgroundList = ref<Background[]>(backgrounds)
 
-        const deleteBackground = (item: number) => {
-            backgrounds.value.splice(item, 1)
-        }
+  const addBackground = (item: Background) => {
+    backgroundList.value.push(item)
+  }
+  const deleteBackground = (item: number) => {
+    backgroundList.value.splice(item, 1)
+  }
 
-        const gerBackground = (i: number) => {
-            return backgrounds.value[i]
-        }
+  const getBackground = (i: number) => {
+    return backgroundList.value[i]
+  }
 
-        return {
-            backgrounds,
-            addBackground,
-            deleteBackground,
-            gerBackground
-        }
-
-    }, {
-        persist: true
-    })
+  return {
+    backgroundList,
+    addBackground,
+    deleteBackground,
+    getBackground
+  }
+}, {
+  persist: true
+})
