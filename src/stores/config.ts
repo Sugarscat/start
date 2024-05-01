@@ -9,8 +9,9 @@ export type Config =  {
   history: boolean,
 }
 
-export const useConfigStore =
-  defineStore('config', () => {
+const defaultEngine = engines[0]
+
+export const useConfigStore = defineStore('config', () => {
 
     const config = ref<Config>({
       background: {
@@ -18,7 +19,12 @@ export const useConfigStore =
         revise: false,
         value: ''
       },
-      engine: engines[0],
+      engine: {
+        name: defaultEngine.name,
+        url: defaultEngine.url,
+        icon: defaultEngine.icon,
+        revise: defaultEngine.revise,
+      },
       history: true,
     })
 

@@ -1,37 +1,32 @@
 <script setup lang="ts">
-import CloseIcon from "@/components/icons/CloseIcon.vue";
+import {BtButtonClose} from "@/components/BluetButton";
 import {onMounted, ref, watch} from "vue";
 import anime from "animejs";
 
-const props = defineProps<{
-  onSure: () => void,
-}>()
-
 const model = defineModel()
-
-watch(() => model.value, (value) => {
-  if (value) {
-    openAnimation()
-  } else {
-    closeAnimation()
+const props = defineProps(
+  {
+    title: {
+      type: String,
+      required: true
+    }
   }
-})
+)
 
 const dialog = ref()
 const body = ref()
-const backdrop = ref()
-const duration = 300
-
+const duration = 200
+const visible = ref()
 
 const close = () => {
   model.value = false
 }
 
 const openAnimation = () => {
-  dialog.value.style.display = "flex"
+  visible.value = true
   anime({
     targets: body.value,
-    translateY: ["100vh", 0],
+    opacity: [0, 1],
     duration: duration,
     easing: "easeInOutQuad",
   })
@@ -40,42 +35,45 @@ const openAnimation = () => {
 const closeAnimation = () => {
   anime({
     targets: body.value,
-    translateY: [0, "100vh"],
+    opacity: [1, 0],
     duration: duration,
     easing: "easeInOutQuad",
     complete: () => {
-      dialog.value.style.display = "none"
+      visible.value = false
     }
   })
 }
 
 onMounted(() => {
-  if (model.value)
-    dialog.value.style.display = "flex"
-  else
-    dialog.value.style.display = "none"
+  visible.value = model.value
+})
+
+watch(() => model.value, (value) => {
+  if (value) {
+    openAnimation()
+  } else {
+    closeAnimation()
+  }
 })
 </script>
 
 <template>
-  <div class="dialog" ref="dialog" :class="{close:!model}">
+  <div class="dialog" ref="dialog" :class="{close:!model}" v-show="visible">
     <div class="dialog-body" ref="body">
-      <div class="title">
+      <div class="head">
         <span>
-          <slot name="title"></slot>
+          {{ props.title }}
         </span>
-        <div class="close-operation" @click="close">
-          <close-icon/>
-        </div>
+        <bt-button-close @click="close"></bt-button-close>
       </div>
       <div class="content">
         <slot name="content"></slot>
       </div>
-      <div class="dialog-operation">
-        <button @click="props.onSure()">确认</button>
+      <div class="footer">
+        <slot name="footer"></slot>
       </div>
     </div>
-    <div class="dialog-backdrop" @click="close" ref="backdrop"></div>
+    <div class="dialog-backdrop" @click="close"></div>
   </div>
 </template>
 
@@ -91,15 +89,16 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
 
-  z-index: 1;
+  z-index: 999;
 
   .dialog-body {
     position: absolute;
     width: 400px;
     padding: 15px;
-    border-radius: 10px;
+    border-radius: 20px;
     background: var(--color-background);
     box-shadow: var(--shadow);
+    opacity: 0;
 
     z-index: 99;
 
@@ -111,7 +110,7 @@ onMounted(() => {
       width: 340px;
     }
 
-    .title {
+    .head {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -132,31 +131,6 @@ onMounted(() => {
       span {
         font-size: 16px;
         font-weight: bold;
-      }
-    }
-
-    .dialog-operation {
-      display: flex;
-      justify-content: flex-end;
-      margin-top: 20px;
-
-      button {
-        height: 35px;
-        width: 90px;
-        border: 2px solid var(--el-color-primary-light-3);
-        background-color: var(--el-color-primary-light-8);
-        border-radius: 5px;
-        cursor: pointer;
-        transition: all 0.1s ease-in-out;
-
-        font-size: .8rem;
-        font-weight: bold;
-        color: var(--color-text);
-
-        &:hover {
-          background-color: var(--el-color-primary-light-3);
-          color: var(--color-background);
-        }
       }
     }
   }

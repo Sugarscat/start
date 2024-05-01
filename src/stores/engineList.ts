@@ -47,32 +47,28 @@ export const engines: Engine[] = [
   }
 ]
 
-export const useEngineListStore =
-    defineStore('engineList', () => {
+export const useEngineListStore = defineStore('engineList', () => {
+  const engineList = ref<Engine[]>(engines)
 
-        const currentEngine = ref<Engine>()
+  const addEngine = (item: Engine) => {
+    engineList.value.push(item)
+  }
 
-        const engineList = ref<Engine[]>(engines)
+  const deleteEngine = (item: number) => {
+    engineList.value.splice(item, 1)
+  }
 
-        const addEngine = (item: Engine) => {
-            engineList.value.push(item)
-        }
+  const getEngine = (item: number) => {
+    return engineList.value[item]
+  }
 
-        const deleteEngine = (item: number) => {
-            engineList.value.splice(item, 1)
-        }
+  return {
+    engineList,
+    addEngine,
+    deleteEngine,
+    getEngine
+  }
 
-        const getEngine = (i: number) => {
-          return engineList.value[i]
-        }
-
-        return {
-            engineList,
-            addEngine,
-            deleteEngine,
-            getEngine
-        }
-
-    }, {
-        persist: true
-    })
+}, {
+  persist: true
+})

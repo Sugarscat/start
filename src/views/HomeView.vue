@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import {ref} from "vue";
-import SearchInput from "@/components/SearchInput.vue";
+import Search from "@/components/Search.vue";
 import Setting from "@/components/Setting";
 import Drawer from "@/components/Drawer.vue";
 import SettingIcon from "@/components/icons/SettingIcon.vue";
@@ -18,13 +18,10 @@ const visible = ref(false);
   </div>
 
   <div class="occupancy top"></div>
-  <search-input/>
+  <search/>
   <div class="occupancy bottom"></div>
 
-  <Drawer v-model="visible">
-    <template #title>
-      设置
-    </template>
+  <Drawer v-model="visible" title="设置">
     <template #content>
       <Setting/>
     </template>

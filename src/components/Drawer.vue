@@ -1,31 +1,30 @@
 <script setup lang="ts">
-
-import CloseIcon from "@/components/icons/CloseIcon.vue";
+import {BtButtonClose} from "@/components/BluetButton";
 import {onMounted, ref, watch} from "vue";
 import anime from "animejs";
 
-
 const model = defineModel()
-
-watch(() => model.value, (value) => {
-  if (value) {
-    openAnimation()
-  } else {
-    closeAnimation()
+const props = defineProps(
+  {
+    title: {
+      type: String,
+      required: true
+    }
   }
-})
+)
 
 const drawer = ref()
 const body = ref()
 const backdrop = ref()
 const duration = 300
+const visible = ref()
 
 const close = () => {
   model.value = false
 }
 
 const openAnimation = () => {
-  drawer.value.style.display = "flex"
+  visible.value = true
   anime({
     targets: body.value,
     right: ["-400px", 0],
@@ -41,31 +40,32 @@ const closeAnimation = () => {
     duration: duration,
     easing: "easeInOutQuad",
     complete: () => {
-      drawer.value.style.display = "none"
+      visible.value = false
     }
   })
 }
 
 onMounted(()=>{
-  if (model.value) {
-    drawer.value.style.display = "flex"
-  } else {
-    drawer.value.style.display = "none"
-  }
+  visible.value = model.value
 })
 
+watch(() => model.value, (value) => {
+  if (value) {
+    openAnimation()
+  } else {
+    closeAnimation()
+  }
+})
 </script>
 
 <template>
-  <div class="drawer" ref="drawer" :class="{close:!model}">
+  <div class="drawer" ref="drawer" :class="{close:!model}" v-show="visible">
     <div class="drawer-body" ref="body">
-      <div class="title">
-      <span>
-        <slot name="title"></slot>
-      </span>
-        <div class="close-operation" @click="close()">
-          <close-icon/>
-        </div>
+      <div class="head">
+        <span>
+          {{ props.title }}
+        </span>
+        <bt-button-close @click="close()"/>
       </div>
       <div class="content">
         <slot name="content"></slot>
@@ -87,7 +87,7 @@ onMounted(()=>{
   display: flex;
   justify-content: flex-end;
 
-  .title {
+  .head {
     display: flex;
     align-items: center;
     justify-content: space-between;

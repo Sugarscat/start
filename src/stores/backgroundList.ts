@@ -15,30 +15,26 @@ export const backgrounds:Background[] = [
   }
 ]
 
-export const useBackgroundListStore =
-    defineStore('backgroundList', () => {
+export const useBackgroundListStore = defineStore('backgroundList', () => {
+  const backgroundList = ref<Background[]>(backgrounds)
 
-        const backgroundList = ref<Background[]>(backgrounds)
+  const addBackground = (item: Background) => {
+    backgroundList.value.push(item)
+  }
+  const deleteBackground = (item: number) => {
+    backgroundList.value.splice(item, 1)
+  }
 
-        const addBackground = (item: Background) => {
-            backgroundList.value.push(item)
-        }
+  const getBackground = (i: number) => {
+    return backgroundList.value[i]
+  }
 
-        const deleteBackground = (item: number) => {
-            backgroundList.value.splice(item, 1)
-        }
-
-        const getBackground = (i: number) => {
-            return backgroundList.value[i]
-        }
-
-        return {
-            backgroundList,
-            addBackground,
-            deleteBackground,
-            getBackground
-        }
-
-    }, {
-        persist: true
-    })
+  return {
+    backgroundList,
+    addBackground,
+    deleteBackground,
+    getBackground
+  }
+}, {
+  persist: true
+})

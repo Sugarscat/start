@@ -8,6 +8,8 @@ import DeleteIcon from "@/components/icons/DeleteIcon.vue";
 import EditIcon from "@/components/icons/EditIcon.vue";
 import SelectIcon from "@/components/icons/SelectIcon.vue";
 import SettingItem from "@/components/Setting/SettingItem.vue";
+import BluetInput from "@/components/BluetInput.vue";
+import BtButton from "@/components/BluetButton";
 import {useBackgroundListStore, useConfigStore, useEngineListStore} from "@/stores";
 
 defineComponent({
@@ -55,10 +57,6 @@ const resetForm = () => {
     revise: true,
     solid: false,
   }
-  nameInput.value.classList.remove('error')
-  iconInput.value.classList.remove('error')
-  urlInput.value.classList.remove('error')
-  backgroundUrlInput.value.classList.remove('error')
 }
 
 const deleteEngine = (number: number) => {
@@ -174,23 +172,23 @@ const deleteBackground = (i: number) => {
       <SettingItem title="搜索引擎" :revise="true" v-model="isEngineOperation">
         <div class="content-engine content">
           <div class="engine-item"
-               v-for="(engine, index) in engineListStore.engineList"
-               :key="index"
-               :class="{active: configStore.getEngine().url === engine.url}"
-               @click="configStore.setEngine(engine)"
+              v-for="(engine, index) in engineListStore.engineList"
+              :key="index"
+              :class="{active: configStore.getEngine().url === engine.url}"
+              @click="configStore.setEngine(engine)"
           >
             <div class="engine-operation left"
-                 v-if="isEngineOperation&&engine.revise"
-                 @click.stop
+                v-if="isEngineOperation&&engine.revise"
+                @click.stop
             >
               <edit-icon @click="updateEngine(index, engine)"/>
             </div>
             <div class="engine-icon"
-                 :style="{backgroundImage: `url(${engine.icon})`}"></div>
+                :style="{backgroundImage: `url(${engine.icon})`}"></div>
             <div class="text">{{engine.name}}</div>
             <div class="engine-operation"
-                 v-if="isEngineOperation&&engine.revise"
-                 @click.stop
+                v-if="isEngineOperation&&engine.revise"
+                @click.stop
             >
               <delete-icon @click="deleteEngine(index)"/>
             </div>
@@ -199,8 +197,8 @@ const deleteBackground = (i: number) => {
             <add-icon/>
           </div>
           <Tip style="margin-top: 10px"
-               msg="若图标无法正常显示，则表明你所在区域无法使用该搜索引擎！"
-               type="warning"
+              msg="若图标无法正常显示，则表明你所在区域无法使用该搜索引擎！"
+              type="warning"
           />
         </div>
       </SettingItem>
@@ -208,16 +206,16 @@ const deleteBackground = (i: number) => {
       <SettingItem title="主题" :revise="false">
         <div class="content-theme content">
           <div class="theme-item"
-               :class="{active: !isDark}"
-               @click="isDark = false"
+              :class="{active: !isDark}"
+              @click="isDark = false"
           >
             <div class="text theme">
               浅色
             </div>
           </div>
           <div class="theme-item"
-               :class="{active: isDark}"
-               @click="isDark = true"
+              :class="{active: isDark}"
+              @click="isDark = true"
           >
             <div class="text theme">
               深色
@@ -226,108 +224,58 @@ const deleteBackground = (i: number) => {
         </div>
       </SettingItem>
 
-      <SettingItem title="背景" :revise="true" v-model="isBgOperation">
+      <!-- <SettingItem title="背景" :revise="true" v-model="isBgOperation">
           <div class="background-item"
-               v-for="(background, index) in backgroundListStore.backgroundList"
-               :class="{active: configStore.getBackground()?.value === background.value}"
-               @click="configStore.setBackground(backgroundListStore.backgroundList[index])"
+              v-for="(background, index) in backgroundListStore.backgroundList"
+              :class="{active: configStore.getBackground()?.value === background.value}"
+              @click="configStore.setBackground(backgroundListStore.backgroundList[index])"
           >
             <div class="selected">
               <select-icon/>
             </div>
             <div :style="`background-image: url('${background.value}')`" class="image"
-                 v-if="background.value!==''"
+                v-if="background.value!==''"
             />
             <div v-else>
               默认
             </div>
             <div class="background-operation"
-                 v-if="isBgOperation && background.revise"
-                 @click="deleteBackground(index)"
+                v-if="isBgOperation && background.revise"
+                @click="deleteBackground(index)"
             >
               <delete-icon/>
             </div>
           </div>
           <div class="background-item"
-               style=""
-               @click="openBackgroundDialog()"
+              style=""
+              @click="openBackgroundDialog()"
           >
             <add-icon/>
           </div>
-      </SettingItem>
-
+      </SettingItem> -->
     </div>
   </div>
 
-  <Dialog v-model="engineDialogVisible"
-          :on-sure="engineOnSure">
-    <template #title>
-      {{title}}
-    </template>
+  <Dialog v-model="engineDialogVisible" :title="title">
     <template #content>
-      <div class="engine-form">
-        <div class="form-item">
-          <label for="name">名称:</label>
-          <div>
-            <input type="text"
-                   id="name"
-                   v-model="engine.name"
-                   ref="nameInput"
-                   @change="verifyEngine"
-                   placeholder="请输入搜索引擎名称"
-            >
-            <p>名称不能为空</p>
-          </div>
-        </div>
-        <div class="form-item">
-          <label for="engine-icon">图标:</label>
-          <div>
-            <input type="text"
-                   id="engine-icon"
-                   v-model="engine.icon"
-                   ref="iconInput"
-                   @change="verifyEngine"
-                   placeholder="请输入搜索引擎图标地址"
-            >
-            <p>图标不能为空</p>
-          </div>
-        </div>
-        <div class="form-item">
-          <label for="url">网址:</label>
-          <div>
-            <input type="text"
-                   id="url"
-                   v-model="engine.url"
-                   ref="urlInput"
-                   @change="verifyEngine"
-                   placeholder="请输入搜索引擎网址"
-            >
-            <p>网址不能为空</p>
-          </div>
-        </div>
+      
+    </template>
+    <template #footer>
+      <div class="footer-btn">
+        <bt-button @click="closeEngineDialog">取消</bt-button>
+        <bt-button type="primary" @click="engineOnSure">确定</bt-button>
       </div>
     </template>
   </Dialog>
 
-  <Dialog v-model="backgroundDialogVisible"
-          :on-sure="addBackground">
-    <template #title>
-      添加背景
-    </template>
+  <Dialog v-model="backgroundDialogVisible" title="添加背景">
     <template #content>
-      <div class="background-form">
-        <div class="form-item">
-          <label for="value">地址:</label>
-          <div>
-            <input type="text"
-                   id="value"
-                   v-model="background.value"
-                   placeholder="请输入图片地址"
-                   ref="backgroundUrlInput"
-            >
-            <p>图片地址不能为空</p>
-          </div>
-        </div>
+      
+    </template>
+    <template #footer>
+      <div class="footer-btn">
+        <button @click="closeBackgroundDialog">取消</button>
+        <button @click="addBackground">确定</button>
       </div>
     </template>
   </Dialog>
@@ -495,50 +443,13 @@ const deleteBackground = (i: number) => {
     label {
       text-align: right;
     }
-
-    input {
-      flex: 1;
-      height: 45px;
-      width: 320px;
-      line-height: 45px;
-      padding: 0 10px;
-      border: 1.5px solid var(--el-color-info-light-3);
-      border-radius: 4px;
-      outline: none;
-
-      text-overflow: ellipsis;
-
-      color: var(--color-text);
-
-      @media (max-width: 410px) {
-        width: 280px;
-      }
-
-      @media (max-width: 360px) {
-        width: 260px;
-      }
-
-      &.error {
-        border-color: var(--el-color-danger-light-3);
-        color: var(--el-color-danger);
-      }
-
-      &:focus {
-        border-color: var(--el-color-primary-light-3);
-        color: var(--color-text);
-      }
-    }
-
-    input + p {
-      display: none;
-      color: var(--el-color-danger);
-      font-size: .75rem;
-      font-weight: bold;
-    }
-
-    input.error + p {
-      display: block;
-    }
   }
+}
+
+.footer-btn {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
 }
 </style>
