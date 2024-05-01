@@ -4,6 +4,7 @@ import {useConfigStore, useEngineListStore} from "@/stores";
 import type { Engine } from '@/stores/engineList';
 import Dialog from "@/components/Dialog.vue";
 import BtRadio, { BtRadioItem } from "@/components/BluetRadio";
+import { isValidUrl } from '@/utils';
 
 defineComponent({
   name: "Search",
@@ -17,24 +18,6 @@ const iconDom = ref()
 const engine = ref<Engine>();
 const showEngineList = ref(false);
 
-const isValidUrl = (url: string): number => {
-  // 使用正则表达式匹配网址的模式
-  const noHttpUrlRegex: string = "^([a-zA-Z0-9]([a-zA-Z0-9\\-]{0,61}[a-zA-Z0-9])?\\.)+[a-zA-Z]{2,6}$";
-
-  const hasHttpRegex: string = "(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]";
-
-  const re1 = new RegExp(noHttpUrlRegex);
-  const re2 = new RegExp(hasHttpRegex);
-
-  // 返回正则表达式匹配成功的结果
-  if (re1.test(url))
-    return 1;
-  else if (re2.test(url))
-    return 2;
-  else
-    return 0;
-}
-
 const doSearch = () => {
 
   if (!engine.value) {
@@ -45,7 +28,6 @@ const doSearch = () => {
 
   if (inputValue.value.length) {
     const re = isValidUrl(inputValue.value)
-    console.log(re)
     switch (re) {
       case 1:
         location.href = 'https://' + inputValue.value;
@@ -77,12 +59,13 @@ onMounted(() => {
   <div class="search-input-area">
     <div id="icon" ref="iconDom" @click="showEngineList = true"></div>
     <input class="search-input"
-           v-model="inputValue"
-           placeholder="回车探索世界，或输入网址"
-           @keyup.enter="doSearch"
-           type="text"
+          v-model="inputValue"
+          placeholder="回车探索世界，或输入网址"
+          @keyup.enter="doSearch"
+          type="text"
     >
     <!-- <button class="search-image" title="不支持"></button> -->
+    <button class="search" @click="doSearch"></button>
   </div>
 
   <Dialog v-model="showEngineList" title="选择搜索引擎">
@@ -157,12 +140,12 @@ onMounted(() => {
 
   }
 
-  button {
+  button.search {
     height: 100%;
     width: 24px;
     border: none;
     cursor: pointer;
-    background-image: url(/images/lens_icon.svg);
+    background-image: url('/search.png');
     background-color: transparent;
     background-position: center;
     background-repeat: no-repeat;
