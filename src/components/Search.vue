@@ -3,6 +3,7 @@ import {defineComponent, onMounted, ref, watch} from 'vue'
 import {useConfigStore, useEngineListStore} from "@/stores";
 import type { Engine } from '@/stores/engineList';
 import Dialog from "@/components/Dialog.vue";
+import BtRadio, { BtRadioItem } from "@/components/BluetRadio";
 
 defineComponent({
   name: "Search",
@@ -87,17 +88,21 @@ onMounted(() => {
   <Dialog v-model="showEngineList" title="选择搜索引擎">
     <template #content>
       <div class="search-engine-dialog">
-        <div class="search-engine-item" 
-          v-for="item in engineListStore.engineList" 
-          :key="item.name"
-          @click="() => {
-            engine = item;
-            showEngineList = false;
-          }"
-        >
-          <img :src="item.icon" alt="">
-          <span>{{ item.name }}</span>
-        </div>
+        <bt-radio>
+          <bt-radio-item v-for="item in engineListStore.engineList" 
+            :active="engine?.url === item.url"
+            :key="item.name"
+            @click="() => {
+              engine = item;
+              showEngineList = false;
+            }"
+          >
+            <div class="search-engine-item">
+              <img :src="item.icon" alt="">
+              <span class="text">{{ item.name }}</span>
+            </div>
+          </bt-radio-item>
+        </bt-radio>
       </div>
     </template>
   </Dialog>
@@ -121,11 +126,11 @@ onMounted(() => {
 
   #icon {
     background-position: center center;
-    background-repeat: no-repeat;
-    background-size: 20px;
+    background-size: 100%;
+    border-radius: 3px;
 
-    height: 24px;
-    width: 24px;
+    height: 22px;
+    width: 22px;
     cursor: pointer;
   }
 
@@ -188,22 +193,18 @@ onMounted(() => {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 0 10px;
-    height: 40px;
-    border-bottom: 1px solid var(--vt-c-divider);
+    gap: 10px;
 
-    &:hover {
-      background-color: var(--vt-c-bg-soft);
+    img {
+      width: 20px;
+      height: 20px;
+      border-radius: 3px;
     }
-  }
-}
 
-.search-engine-item {
-
-  img {
-    width: 20px;
-    height: 20px;
-    border-radius: 10px;
+    .text {
+      font-size: .8rem;
+      font-weight: bold;
+    }
   }
 }
 </style>

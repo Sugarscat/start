@@ -1,5 +1,10 @@
 <script setup lang="ts">
 import {defineComponent, ref} from 'vue'
+import {
+  useBackgroundListStore, 
+  useConfigStore, 
+  useEngineListStore
+} from "@/stores";
 import Tip from "@/components/Tip.vue";
 import Dialog from "@/components/Dialog.vue";
 import AddIcon from "@/components/icons/AddIcon.vue";
@@ -10,7 +15,8 @@ import SelectIcon from "@/components/icons/SelectIcon.vue";
 import SettingItem from "@/components/Setting/SettingItem.vue";
 import BluetInput from "@/components/BluetInput.vue";
 import BtButton from "@/components/BluetButton";
-import {useBackgroundListStore, useConfigStore, useEngineListStore} from "@/stores";
+import BtRadio, { BtRadioItem } from "@/components/BluetRadio";
+
 
 defineComponent({
   name: "Setting",
@@ -171,31 +177,33 @@ const deleteBackground = (i: number) => {
     <div class="setting-body">
       <SettingItem title="搜索引擎" :revise="true" v-model="isEngineOperation">
         <div class="content-engine content">
-          <div class="engine-item"
-              v-for="(engine, index) in engineListStore.engineList"
-              :key="index"
-              :class="{active: configStore.getEngine().url === engine.url}"
-              @click="configStore.setEngine(engine)"
-          >
-            <div class="engine-operation left"
-                v-if="isEngineOperation&&engine.revise"
-                @click.stop
+          <bt-radio>
+            <bt-radio-item class="engine-item"
+                v-for="(engine, index) in engineListStore.engineList"
+                :key="index"
+                :active="configStore.getEngine().url === engine.url"
+                @click="configStore.setEngine(engine)"
             >
-              <edit-icon @click="updateEngine(index, engine)"/>
-            </div>
-            <div class="engine-icon"
-                :style="{backgroundImage: `url(${engine.icon})`}"></div>
-            <div class="text">{{engine.name}}</div>
-            <div class="engine-operation"
-                v-if="isEngineOperation&&engine.revise"
-                @click.stop
-            >
-              <delete-icon @click="deleteEngine(index)"/>
-            </div>
-          </div>
-          <div class="engine-item" title="添加" @click="addEngine()">
+              <div class="engine-operation left"
+                  v-if="isEngineOperation&&engine.revise"
+                  @click.stop
+              >
+                <edit-icon @click="updateEngine(index, engine)"/>
+              </div>
+              <div class="engine-icon"
+                  :style="{backgroundImage: `url(${engine.icon})`}"></div>
+              <div class="text">{{engine.name}}</div>
+              <div class="engine-operation"
+                  v-if="isEngineOperation&&engine.revise"
+                  @click.stop
+              >
+                <delete-icon @click="deleteEngine(index)"/>
+              </div>
+          </bt-radio-item>
+          <bt-radio-item class="engine-item" title="添加" @click="addEngine()" :active="false">
             <add-icon/>
-          </div>
+          </bt-radio-item>
+          </bt-radio>
           <Tip style="margin-top: 10px"
               msg="若图标无法正常显示，则表明你所在区域无法使用该搜索引擎！"
               type="warning"
@@ -204,24 +212,14 @@ const deleteBackground = (i: number) => {
       </SettingItem>
 
       <SettingItem title="主题" :revise="false">
-        <div class="content-theme content">
-          <div class="theme-item"
-              :class="{active: !isDark}"
-              @click="isDark = false"
-          >
-            <div class="text theme">
-              浅色
-            </div>
-          </div>
-          <div class="theme-item"
-              :class="{active: isDark}"
-              @click="isDark = true"
-          >
-            <div class="text theme">
-              深色
-            </div>
-          </div>
-        </div>
+        <bt-radio>
+          <bt-radio-item :active="!isDark" @click="isDark = false" class="theme-item">
+            <span class="text">浅色</span>
+          </bt-radio-item>
+          <bt-radio-item :active="isDark" @click="isDark = true" class="theme-item">
+            <span class="text">深色</span>
+          </bt-radio-item>
+        </bt-radio>
       </SettingItem>
 
       <!-- <SettingItem title="背景" :revise="true" v-model="isBgOperation">
@@ -294,27 +292,9 @@ const deleteBackground = (i: number) => {
       .background-item,
       .theme-item,
       .engine-item {
-        display: flex;
-        align-items: center;
-        padding: 10px;
-        cursor: pointer;
-        border: 2px solid var(--el-color-info-light-7);
-        border-radius: 10px;
-
-        transition: all 0.25s ease-in-out;
-
         .text {
           font-size: .8rem;
           font-weight: bold;
-
-          &.theme {
-            padding: 0 10px;
-          }
-        }
-
-        &.active {
-          border-color: var(--el-color-primary-light-3);
-          background-color: var(--el-color-primary-light-8);
         }
       }
 
@@ -363,6 +343,8 @@ const deleteBackground = (i: number) => {
           background-position: center center;
           background-repeat: no-repeat;
           margin-right: 10px;
+
+          border-radius: 3px;
         }
       }
 

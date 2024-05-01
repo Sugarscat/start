@@ -27,6 +27,7 @@ const openAnimation = () => {
   anime({
     targets: body.value,
     opacity: [0, 1],
+    translateY: ['60px', '0px'],
     duration: duration,
     easing: "easeInOutQuad",
   })
@@ -38,6 +39,7 @@ const closeAnimation = () => {
     opacity: [1, 0],
     duration: duration,
     easing: "easeInOutQuad",
+    translateY: ['0px', '60px'],
     complete: () => {
       visible.value = false
     }
