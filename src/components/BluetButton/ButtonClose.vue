@@ -4,7 +4,7 @@ import CloseIcon from '@/components/icons/CloseIcon.vue';
 
 <template>
   <button class="bluet-btn btn-close">
-    <close-icon/>
+    <close-icon class="close-icon"/>
   </button>
 </template>
 
@@ -21,5 +21,16 @@ import CloseIcon from '@/components/icons/CloseIcon.vue';
     display: flex;
     justify-content: center;
     align-items: center;
+
+  &:hover {
+    .close-icon {
+      fill: var(--el-text-color-regular);
+    }
+  }
+
+  .close-icon {
+    width: 15px;
+    height: 15px;
+  }
 }
 </style>
